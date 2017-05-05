@@ -209,10 +209,12 @@ The example payload below will attempt to discover servers and chassis in the ip
 ~~~
 - ##### _supported devices group are {SERVER,CHASSIS and STORAGE (Complellent) - Discovery and brief summary;}
 - VM and SWITCH (Only discovery but NO Summary)
-Supported device types :
-SERVER :
-	IDRAC7,
-    IDRAC8,
+Supported device types:
+
+~~~
+SERVER: 
+   IDRAC7, 
+   IDRAC8,
 
 CHASSIS:
     CMC,
@@ -237,6 +239,7 @@ STORAGE:
 
 VM:
 	VCENTER
+~~~
 ---
 
 ### Support
