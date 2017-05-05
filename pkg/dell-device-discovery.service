@@ -1,0 +1,11 @@
+[Unit]
+Description=dell-device-discovery
+After=syslog.target
+
+[Service]
+User=devuser
+ExecStart=/opt/dell/smi/service-device-discovery/application.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
