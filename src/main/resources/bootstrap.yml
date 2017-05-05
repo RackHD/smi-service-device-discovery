@@ -1,0 +1,32 @@
+server:
+    port: 46002
+---
+
+spring:
+  profiles: default
+  application:
+    name: DEVICE-DISCOVERY
+  cloud:
+    bus:
+      enabled: false
+    consul:
+      enabled: false
+      config:
+        enabled: false
+---
+
+spring:
+  profiles: consul
+  application:
+    name: DEVICE-DISCOVERY
+  cloud:
+    consul:
+      enabled: true
+      host: service-registry
+      port: 8500
+      config:
+        prefix: config
+        profileSeparator: '::'
+        format: YAML
+        data-key: data
+        fail-fast: true
