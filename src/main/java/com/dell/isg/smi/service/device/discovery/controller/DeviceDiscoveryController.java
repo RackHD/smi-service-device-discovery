@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dell.isg.smi.commons.elm.exception.RuntimeCoreException;
-import com.dell.isg.smi.commons.utilities.CustomRecursiveToStringStyle;
+import com.dell.isg.smi.commons.elm.utilities.CustomRecursiveToStringStyle;
 import com.dell.isg.smi.commons.model.common.DevicesIpsRequest;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverIPRangeDeviceRequests;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverdDeviceResponse;

@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import com.dell.isg.smi.commons.utilities.CustomRecursiveToStringStyle;
+import com.dell.isg.smi.commons.elm.utilities.CustomRecursiveToStringStyle;
 import com.dell.isg.smi.commons.model.common.Credential;
 import com.dell.isg.smi.commons.model.common.DevicesIpsRequest;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverDeviceRequest;
@@ -53,10 +53,6 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
     @Autowired
     RequestScopeDiscoveryCredential requestScopeDiscoveryCredential;
 
-    private int IP_PING_THREAD_POOL = 22000;
-
-    private int DISCOVER_THREAD_POOL = 2000;
-
     private static final Logger logger = LoggerFactory.getLogger(DiscoveryManagerImpl.class.getName());
 
 
@@ -79,7 +75,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
                     if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, discoverGroupName) && !StringUtils.equals(discoverGroupName, DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
                         DiscoveryDeviceGroupEnum discoverGroup = DiscoveryDeviceGroupEnum.valueOf(discoverGroupName);
                         if (identifyDeviceType((List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice()), discoverGroup)) {
-                            for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceNameByGroup(discoverGroup)) {
+                            for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(discoverGroup)) {
                                 discoveredDeviceInfos.addAll(CollectionUtils.select(discoverDeviceInfos, predicateDeviceInfo(deviceName)));
                             }
                         }
@@ -176,7 +172,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
             if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, discoverGroupName) && !StringUtils.equals(discoverGroupName, DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
                 DiscoveryDeviceGroupEnum discoverGroup = DiscoveryDeviceGroupEnum.valueOf(discoverGroupName);
                 if (identifyDeviceType((List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice()), discoverGroup)) {
-                    for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceNameByGroup(discoverGroup)) {
+                    for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(discoverGroup)) {
                         discoveredDeviceInfos.addAll(CollectionUtils.select(discoverDeviceInfos, predicateDeviceInfo(deviceName)));
                     }
                 }
@@ -191,7 +187,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         logger.trace("Started device identification threads");
         StopWatch watch = new StopWatch();
         watch.start();
-        ExecutorService executor = Executors.newFixedThreadPool(IP_PING_THREAD_POOL);
+        ExecutorService executor = Executors.newFixedThreadPool(22000);
         for (DiscoveredDeviceInfo discoverDeviceResponse : discoverDeviceInfos) {
             if (StringUtils.equalsIgnoreCase(discoverDeviceResponse.getDeviceType(), DiscoveryDeviceTypeEnum.UNKNOWN.name())) {
                 Runnable discoveryIdentificationTask = new DeviceIdentificationThread(discoverDeviceResponse, discoveryDeviceConfigProvider, discoveryDeviceGroupEnum);
@@ -236,7 +232,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         int count = filteredList.size();
         logger.trace(" Device count for Summary Extraction = " + count);
         if (count > 0) {
-            ExecutorService executor = Executors.newFixedThreadPool(DISCOVER_THREAD_POOL);
+            ExecutorService executor = Executors.newFixedThreadPool(2000);
             for (DiscoveredDeviceInfo discoverDeviceInfo : filteredList) {
                 Runnable discoverTask = new SummaryCollectionThread(discoverDeviceInfo);
                 executor.execute(discoverTask);
@@ -273,7 +269,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         DiscoverdDeviceResponse discoverdDeviceResponse = new DiscoverdDeviceResponse();
         discoverdDeviceResponse.setDeviceGroup(enumGroupName.value());
         List<DiscoveredDeviceTypes> discoveredDeviceTypesList = new ArrayList<DiscoveredDeviceTypes>();
-        for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceNameByGroup(enumGroupName)) {
+        for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(enumGroupName)) {
             DiscoveredDeviceTypes discoveredDeviceTypes = new DiscoveredDeviceTypes();
             discoveredDeviceTypes.setDeviceName(deviceName);
             Collection<DiscoveredDeviceInfo> discoveredDeviceInfosListByDeviceName = CollectionUtils.select(discoveredDeviceInfos, predicateDeviceInfo(deviceName));
@@ -343,7 +339,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         }
         for (String credentialGroupName : credentialGroupNames) {
             if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, credentialGroupName)) {
-                List<String> deviceTypeNmes = discoveryDeviceConfigProvider.getAllDeviceNameByGroup(DiscoveryDeviceGroupEnum.valueOf(credentialGroupName));
+                List<String> deviceTypeNmes = discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(DiscoveryDeviceGroupEnum.valueOf(credentialGroupName));
                 for (String name : deviceTypeNmes) {
                     requestScopeDiscoveryCredential.add(name.toUpperCase(), rangeCredential);
                 }
