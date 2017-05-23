@@ -43,6 +43,7 @@ public class ExtractDeviceSummaryUtil {
         case IDRAC6:
         case IDRAC7:
         case IDRAC8:
+        case IDRAC9:
             extractSummaryThouWsman(discoverDeviceInfo);
             break;
         case CMC:

@@ -55,6 +55,18 @@ discoveryConfig:
              deviceDefaultCredential: 
                user: "root"
                password: "calvin"
+        -
+          discoveryDeviceName: "IDRAC9"
+          discoveryRules: 
+             protocol: "HTTPS"
+             command: "https://%s/cgi-bin/discover"
+             identifyBy: "REGULAR"
+             identifier: 
+                -
+                  text: "<ENDPOINTTYPE>iDRAC9</ENDPOINTTYPE>"
+             deviceDefaultCredential: 
+               user: "root"
+               password: "calvin"
       discoveryDeviceGroup: "SERVER"
     -
       discoveryDeviceType:
