@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import com.dell.isg.smi.commons.elm.utilities.CustomRecursiveToStringStyle;
+import com.dell.isg.smi.commons.utilities.CustomRecursiveToStringStyle;
 import com.dell.isg.smi.commons.model.common.Credential;
 import com.dell.isg.smi.commons.model.common.DevicesIpsRequest;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverDeviceRequest;
