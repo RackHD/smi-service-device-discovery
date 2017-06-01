@@ -6,7 +6,9 @@ package com.dell.isg.smi.service.device.discovery.config;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -21,14 +23,12 @@ import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceGroupEnum;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceTypeEnum;
 import com.dell.isg.smi.commons.model.device.discovery.config.DeviceGroup;
 import com.dell.isg.smi.commons.model.device.discovery.config.DeviceType;
+import com.dell.isg.smi.commons.model.device.discovery.config.DiscoveryConfig;
 import com.dell.isg.smi.commons.model.device.discovery.config.DiscoveryRule;
 
 @Component
 public class DiscoveryDeviceConfigProvider {
-
-	@Autowired
-	DiscoveryDeviceConfig discoveryDeviceConfig;
-
+	
 	@Value("${command.arp.mac}")
 	String ARP_COMMAND;
 
@@ -38,23 +38,38 @@ public class DiscoveryDeviceConfigProvider {
 	EnumMap<DiscoveryDeviceTypeEnum, DeviceType> discoveryDeviceTypeMap = new EnumMap<DiscoveryDeviceTypeEnum, DeviceType>(
 			DiscoveryDeviceTypeEnum.class);
 
+	@Autowired
+	DiscoveryDeviceConfig defaultDiscoveryDeviceConfig;
+	
+	DiscoveryConfig discoveryConfig ;
+
 	@PostConstruct
 	public void init() {
-		for (DiscoveryDeviceGroupEnum enumGroupName : DiscoveryDeviceGroupEnum.values()) {
-			discoveryDeviceGroupMap.put(enumGroupName, findDeviceGroup(enumGroupName));
-		}
-
-		for (DiscoveryDeviceTypeEnum enumTypeName : DiscoveryDeviceTypeEnum.values()) {
-			discoveryDeviceTypeMap.put(enumTypeName, findDeviceTypeByTypeEnum(enumTypeName));
-		}
-
+		discoveryConfig = defaultDiscoveryDeviceConfig.getDiscoveryConfig();
+		constructDeviceGroupMap();
 	}
 
 	@PreDestroy
 	public void cleanup() {
-
+		discoveryDeviceGroupMap.clear();
+		discoveryDeviceTypeMap.clear();
 	}
 
+	private void constructDeviceGroupMap(){
+		discoveryDeviceGroupMap.clear();
+		for (DiscoveryDeviceGroupEnum enumGroupName : DiscoveryDeviceGroupEnum.values()) {
+			discoveryDeviceGroupMap.put(enumGroupName, findDeviceGroup(enumGroupName));
+		}
+		constructDeviceTypeMap();
+	}
+
+	private void constructDeviceTypeMap(){
+		discoveryDeviceTypeMap.clear();
+		for (DiscoveryDeviceTypeEnum enumTypeName : DiscoveryDeviceTypeEnum.values()) {
+			discoveryDeviceTypeMap.put(enumTypeName, findDeviceTypeByTypeEnum(enumTypeName));
+		}
+	}
+	
 	public DeviceGroup getDeviceGroup(DiscoveryDeviceGroupEnum deviceGroupEnum) {
 		DeviceGroup deviceGroup = discoveryDeviceGroupMap.get(deviceGroupEnum);
 		if (deviceGroup != null) {
@@ -65,7 +80,7 @@ public class DiscoveryDeviceConfigProvider {
 
 	private DeviceGroup findDeviceGroup(DiscoveryDeviceGroupEnum deviceGroupEnum) {
 		List<DeviceGroup> deviceGroupList = (List<DeviceGroup>) CollectionUtils
-				.select(discoveryDeviceConfig.getDeviceGroup(), predicateDeviceGroup(deviceGroupEnum.value()));
+				.select(discoveryConfig.getDeviceGroup(), predicateDeviceGroup(deviceGroupEnum.value()));
 		if (CollectionUtils.isEmpty(deviceGroupList)) {
 			return null;
 		}
@@ -148,6 +163,40 @@ public class DiscoveryDeviceConfigProvider {
 				return deviceType.getName().trim().equals(type);
 			}
 		};
+	}
+	
+	public void modifyDeviceTypeConfig(DeviceType deviceType, String groupName) {
+		DiscoveryDeviceGroupEnum deviceGroupEnum = DiscoveryDeviceGroupEnum.fromValue(groupName);
+		int ruleIndex = -1;
+		int typeIndex = -1;
+		for (DiscoveryRule discoveryRule : discoveryDeviceGroupMap.get(deviceGroupEnum).getDiscoveryRule()) {
+			ruleIndex++;
+			OptionalInt indexOpt = IntStream.range(0, discoveryRule.getDeviceType().size())
+				     .filter(i -> deviceType.getName().equals( discoveryRule.getDeviceType().get(i).getName()))
+				     .findFirst();
+			if (indexOpt != null) {
+				typeIndex = indexOpt.getAsInt();
+				break;
+			}
+		}
+		if (typeIndex >= 0) {
+			DeviceType modifyDeviceType = discoveryDeviceGroupMap.get(deviceGroupEnum).getDiscoveryRule().get(ruleIndex).getDeviceType().get(typeIndex);
+			modifyDeviceType.setEnabled(deviceType.getEnabled());
+			modifyDeviceType.getDeviceDefaultCredential().setPassword(deviceType.getDeviceDefaultCredential().getPassword());
+			modifyDeviceType.getDeviceDefaultCredential().setUsername(deviceType.getDeviceDefaultCredential().getUsername());
+			discoveryDeviceGroupMap.get(deviceGroupEnum).getDiscoveryRule().get(ruleIndex).getDeviceType().set(typeIndex, modifyDeviceType);
+			constructDeviceTypeMap();
+		}
+	}
+	
+	public void restore(){
+		discoveryConfig = defaultDiscoveryDeviceConfig.getDiscoveryConfig();
+		constructDeviceGroupMap();
+	}
+	
+	public void loadFrom(DiscoveryDeviceConfig newDiscoveryDeviceConfig){
+		discoveryConfig = newDiscoveryDeviceConfig.getDiscoveryConfig();
+		constructDeviceGroupMap();
 	}
 
 }

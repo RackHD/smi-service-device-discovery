@@ -25,16 +25,17 @@ group = 'com.dell.isg.smi'
 buildscript {
 	ext {
 		springVersion = '4.3.6.RELEASE'
-    	springBootVersion = '1.5.1.RELEASE'
+    	springBootVersion = '1.5.3.RELEASE'
     	springCloudVersion = 'Camden.SR5'
+    	vaadinVersion = '8.0.6'
+        vaadinSpringVersion = '2.0.1' 
 	}
    repositories {
-    mavenLocal()
-	maven {
-		url "${artifactory_contextUrl}/libs-release"
-		url "https://plugins.gradle.org/m2/"
-
-	}
+	maven {url "${artifactory_contextUrl}/libs-release"}
+	maven {url "https://plugins.gradle.org/m2/"}
+	maven {url "http://maven.vaadin.com/vaadin-addons" }
+	mavenLocal()
+    mavenCentral()
   }
   dependencies {
   	classpath "io.spring.gradle:dependency-management-plugin:+"
@@ -67,6 +68,7 @@ sonarqube {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
 	}
 }
 
@@ -83,10 +85,11 @@ springBoot {
 }
 
 repositories {
+	maven {url "${artifactory_contextUrl}/libs-release"}
+	maven {url "https://plugins.gradle.org/m2/"}
+	maven {url "http://maven.vaadin.com/vaadin-addons" }
 	mavenLocal()
-	maven {
-		url "${artifactory_contextUrl}/libs-release"
-	}
+    mavenCentral()
 }
 
 dependencies {
@@ -114,6 +117,23 @@ dependencies {
     runtime group: 'wiseman', name: 'wiseman', version: '+'
 	testCompile group: 'junit', name: 'junit', version: '+'
 	testCompile("org.springframework.boot:spring-boot-starter-test")
+	
+	compile "com.vaadin:vaadin-server:${vaadinVersion}"
+	compile "com.vaadin:vaadin-push:${vaadinVersion}"
+	compile "com.vaadin:vaadin-client-compiled:${vaadinVersion}"
+	compile "com.vaadin:vaadin-themes:${vaadinVersion}"
+	compile("org.vaadin:viritin:2.0.beta2")
+    compile("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringVersion}")
+    compile "de.codecentric.vaadin:copy2clipboard:0.2.4"
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.0.pr2'
+	//compile group: 'org.vaadin.spring', name: 'spring-vaadin-eventbus', version: '0.0.5.RELEASE'
+	compile group: 'org.vaadin.spring.extensions', name: 'vaadin-spring-ext-boot', version:'2.0.0.RELEASE'
+    //compile group: 'org.vaadin.spring.extensions', name: 'vaadin-spring-ext-core', version: '2.0.0.RELEASE'
+    
+    compile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
+    compile group: 'org.glassfish.web', name: 'javax.el', version: '2.2.4'
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.3.4.Final'
+
 }
 
 test {

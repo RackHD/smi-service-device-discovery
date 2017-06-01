@@ -1,0 +1,528 @@
+// Dell-UI Custom Variables and Alienware Custom Variables
+// Dell UI Theme v1.2.2 based on Bootstrap v3.3.5
+// DCX, Dell, Inc. 2015
+// --------------------------------------------------
+@import 'variables';
+
+// Global values
+// --------------------------------------------------
+
+// Grays
+// -------------------------
+@dell-gray-dark:                          #444;
+@dell-gray:                               #aaa;
+@dell-gray-stroke:                        #ccc;
+@dell-gray-light-stroke:                  #e4e4e4;
+@dell-gray-medium:                        #737373;
+@dell-gray-light:                         #eee;
+@dell-gray-very-light:                    #f9f9f9;
+@dell-gray-hover:                         #f3f3f3;
+@black:                                   #000;
+@white:                                   #fff;
+
+// Accent colors
+// -------------------------
+@dell-blue:                               #007db8;
+@dell-blue-hover:                         #006dab;
+@dell-dark-blue:                          #00447c;
+@dell-green:                              #6ea204;
+@dell-green-hover:                        #5d9303;
+@dell-green-light:                        #c1d82f;
+@dell-yellow:                             #f2af00;
+@dell-orange:                             #ee6411;
+@dell-red:                                #d74324;
+@dell-red-dark:                           #ce1126;
+@dell-berry:                              #b7295a;
+@dell-purple:                             #6e2585;
+@dell-teal:                               #42aeaf;
+@dell-alert-yellow:                       #ffffc9;
+@dell-highlight-blue:                     #cce5f1;
+@alert-bg:                                @dell-alert-yellow;
+
+
+// Button colors
+// -------------------------
+@dell-primary-blue:                       #007db8;
+@dell-primary-blue-hover:                 #00447c;
+@dell-success-green:                      #408001;
+@dell-success-green-hover:                #285709;
+@dell-default-gray:                       #eee;
+@dell-default-gray-hover:                 #dadada;
+@dell-default-gray-dark-hover:            #333;
+
+
+// Alienware related colors
+// -------------------------
+@alien-background:                        #010101;
+@alien-light-background:                  #333;
+@alien-stroke-dark:                       #28231b;
+@alien-green:                             #00f000;
+@alien-orange:                            #f05000;
+@alien-teal:                              #25e9eb;
+@alien-gray:                              #c5c0b4;
+@alien-red:                               #f00000;
+@alien-gray-dark:                         #88847b;
+@alien-primary:                           #1ebbb4;
+@alien-primary-bckg:                      #266165;
+@alien-btn:                               #b2ada2;
+@alien-btn-highlight:                     #88847b;
+@alien-btn-dark:                          #322d27;
+@alien-btn-dark-highlight:                #14120e;
+@alien-table-stripe:                      #404040;
+@alien-gray-darker:                       #404040;
+
+// Custom Aside Colors
+// -------------------------
+@aside-nav-bg:                            @dell-gray-dark;
+@aside-nav-bg-active:                     @dell-blue;
+
+
+
+@default-stroke:                          2px;
+@thin-stroke:                             1px;
+
+
+//Todo: not certain if these are still relevant
+//----------------------------------------------
+//@btn-inverse-background: @dell-gray-dark;
+//@btn-inverse-background-highlight: @gray-darker;
+
+//-----------------------------------------------------------------------------
+//Overrides from Bootstrap variable defaults
+//-----------------------------------------------------------------------------
+
+//== Colors
+//
+//## Gray and brand colors for use across Bootstrap.
+@gray-darker:            @dell-gray-dark;       // Dell@btn-border-radius-base specific brand color
+@gray-dark:              @dell-gray-medium;     // Dell specific brand color
+@gray:                   @dell-gray;            // Dell specific brand color
+@gray-light:             @dell-gray-light;      // Dell specific brand color
+@gray-lighter:           @dell-gray-very-light; // Dell specific brand color
+
+@brand-primary:          @dell-primary-blue;    // Dell specific brand color
+@brand-success:          @dell-success-green;   // Dell specific brand color
+@brand-info:             @dell-teal;            // Dell specific brand color
+@brand-warning:          @dell-orange;          // Dell specific brand color
+@brand-danger:           @dell-red;             // Dell specific brand color
+
+//** Global text color on `<body>`.
+@text-color:            @dell-gray-dark;      // Dell specific brand color
+
+//** Link hover color set via `darken()` function.
+@link-hover-color:      darken(@link-color, 10%);
+//** Link hover decoration.
+@link-hover-decoration: none;
+
+//== Typography
+//
+//## Font, line-height, and color for body text, headings, and more.
+
+@dell-font-family: 'robotolight', 'Roboto', 'Segoe UI', 'Helvetica Neue', 'Meiryo UI Reg', 'メイリオ Reg', 'MS UI Gothic Reg', 'Hiragino Kaku Gothic Reg', 'ヒラギノ角ゴ Pro W3 Reg', 'Microsoft YaHei', '微软雅黑', 'Hiragino Sans GB', 'Microsoft JhengHei', '微軟正黑體', 'Malgun Gothic', Gulim, Tahoma, 'Arial Unicode', sans-serif;
+
+@dell-font-family-light: 'robotothin', 'Roboto', 'Segoe UI', 'Helvetica Neue', 'Meiryo UI Reg', 'メイリオ Reg', 'MS UI Gothic Reg', 'Hiragino Kaku Gothic Reg', 'ヒラギノ角ゴ Pro W3 Reg', 'Microsoft YaHei', '微软雅黑', 'Hiragino Sans GB', 'Microsoft JhengHei', '微軟正黑體', 'Malgun Gothic', Gulim, Tahoma, 'Arial Unicode', sans-serif;
+
+@dell-font-family-bold: 'robotoregular', 'Roboto', 'Segoe UI', 'Helvetica Neue', 'Meiryo UI Reg', 'メイリオ Reg', 'MS UI Gothic Reg', 'Hiragino Kaku Gothic Reg', 'ヒラギノ角ゴ Pro W3 Reg', 'Microsoft YaHei', '微软雅黑', 'Hiragino Sans GB', 'Microsoft JhengHei', '微軟正黑體', 'Malgun Gothic', Gulim, Tahoma, 'Arial Unicode', sans-serif;
+
+
+@theme-serif-font-family-bold: @dell-font-family-bold;
+@font-family-sans-serif:  @dell-font-family;
+@font-family-serif:       @dell-font-family;
+@font-family-base:        @dell-font-family;
+
+
+//** By default, this inherits from the `<body>`.
+@headings-font-family:    @theme-serif-font-family-bold;    // Dell specific fonts
+@headings-font-weight:    normal;                           // instead of browser default, bold
+@headings-color:          inherit;                          // empty to use BS default, @text-color
+
+//-- Iconography
+//
+//## Specify custom locations of the include Glyphicons icon font. Useful for those including Bootstrap via Bower.
+
+@icon-font-path:          '../bower_components/bootstrap/dist/fonts/';
+
+//== Components
+//
+//## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
+
+@padding-base-vertical:     6px;
+@padding-base-horizontal:   12px;
+
+@line-height-large:         1.33; //LAR: Default Bootstrap is 1.3333333.  We may want to revert.
+
+@border-radius-base:        @border-radius-small;
+@border-radius-large:       5px;
+@border-radius-small:       1px;
+
+//** Global color for active items (e.g., navs or dropdowns).
+@component-active-color:    @white;
+
+//** Background color used for `.table-striped`.
+@table-bg-accent:               @dell-gray-light;
+//** Background color used for `.table-hover`.
+@table-bg-hover:                @dell-highlight-blue;
+
+//** Border color for table and cell borders.
+@table-border-color:            @dell-gray-stroke;
+
+//== Buttons
+//
+//## For each of Bootstrap's buttons, define text, background and border color.
+
+@btn-font-weight:                normal;
+
+@btn-default-color:              #00618f;
+@btn-default-bg:                 @dell-default-gray;
+@btn-default-border:             @dell-gray-stroke;
+
+@btn-primary-color:              @white;
+@btn-primary-bg:                 @dell-primary-blue;
+@btn-primary-border:             darken(@dell-primary-blue, 5%);
+
+@btn-success-color:              @white;
+@btn-success-bg:                 @dell-success-green;
+@btn-success-border:             darken(@dell-success-green, 5%);
+
+@btn-info-color:                 @white;
+
+@btn-warning-color:              @white;
+
+@btn-danger-color:               @white;
+
+@btn-border-radius-base:		 @border-radius-base;
+@btn-border-radius-large:        @border-radius-base;
+@btn-border-radius-small: 		 @border-radius-base;
+
+//== Forms
+//
+//##
+
+//** `<input>` background color
+@input-bg:                       @white;
+
+//** Text color for `<input>`s
+@input-color:                    @dell-gray-dark;
+//** `<input>` border color
+@input-border:                   @dell-gray-stroke;
+
+//** Border color for inputs on focus
+@input-border-focus:             @dell-blue;
+
+//** Placeholder text color
+@input-color-placeholder:        @dell-gray;
+
+
+@legend-border-color:            @dell-gray-light;
+
+//== Dropdowns
+//
+//## Dropdown menu container and contents.
+
+//** Background for the dropdown menu.
+@dropdown-bg:                    @white;
+
+//** Dropdown menu `border-color` **for IE8**.
+@dropdown-fallback-border:       @dell-gray-stroke;
+//** Divider color for between dropdown items.
+@dropdown-divider-bg:            @dell-gray-light;
+
+//** Hover background for dropdown links.
+@dropdown-link-hover-bg:         @dell-highlight-blue;
+
+//** Active dropdown menu item text color.
+@dropdown-link-active-color:     @gray-dark;
+//** Active dropdown menu item background color.
+@dropdown-link-active-bg:        @dell-highlight-blue;
+
+// Note: Deprecated @dropdown-caret-color as of v3.1.0
+@dropdown-caret-color:           @black;
+
+//** `.form-group` margin
+@form-group-margin-bottom:       15px; //LAR Removed from Bootstrap.
+
+//-- Z-index master list
+//
+// Warning: Avoid customizing these values. They're used for a bird's eye view
+// of components dependent on the z-axis and are designed to all work together.
+//
+// Note: These variables are not generated into the Customizer.
+
+@zindex-popover:           1030;
+@zindex-tooltip:           1030;
+
+//== Navbar
+//
+//##
+// Navbar links
+@navbar-default-link-color:                @dell-blue;
+@navbar-default-link-hover-color:          darken(@dell-blue, 6.5%);
+@navbar-default-link-active-color:         @dell-blue;
+@navbar-default-link-disabled-color:       @dell-gray-stroke;
+
+// Inverted navbar
+// Reset inverted navbar basics
+@navbar-inverse-color:                      @white;
+@navbar-inverse-bg:                         @dell-blue;
+
+// Inverted navbar links
+@navbar-inverse-link-color:                 @white;
+@navbar-inverse-link-hover-color:           darken(@dell-highlight-blue, 5%);
+@navbar-inverse-link-active-color:          @dell-highlight-blue;
+@navbar-inverse-link-active-bg:             @navbar-inverse-bg;
+
+// Inverted navbar brand label
+@navbar-inverse-brand-hover-color:          @white;
+
+// Inverted navbar toggle
+@navbar-inverse-toggle-icon-bar-bg:         @white;
+
+//== Navs
+//
+//##
+
+//=== Shared nav styles
+@nav-link-hover-bg:                         @dell-highlight-blue;
+
+@nav-open-link-hover-color:                 @white; //LAR: Removed from Bootstrap.
+
+//== Tabs
+@nav-tabs-border-color:                     @dell-gray-stroke;
+
+@nav-tabs-active-link-hover-bg:             @white;
+@nav-tabs-active-link-hover-color:          @dell-gray-dark;
+@nav-tabs-active-link-hover-border-color:   @dell-blue;
+
+@nav-tabs-justified-link-border-color:            @dell-gray-stroke;
+@nav-tabs-justified-active-link-border-color:     @dell-blue;
+
+//== Pills
+@nav-pills-active-link-hover-color:         @white;
+
+//== Pagination
+//
+//##
+@pagination-bg:                        @white;
+
+@pagination-hover-bg:                  @dell-gray-hover;
+
+@pagination-active-color:              @white;
+
+@pagination-disabled-color:            @dell-gray-medium;
+@pagination-disabled-bg:               @white;
+@pagination-disabled-border:           @dell-gray-dark;
+
+//== Pager
+//
+//##
+
+@pager-bg:                             @btn-default-bg;
+@pager-border:                         @btn-default-border;
+@pager-border-radius:                  @border-radius-small;
+
+//== Jumbotron
+//
+//##
+
+@jumbotron-heading-font-size:    32px;
+
+//== Form states and alerts
+//
+//## Define colors for form feedback states and, by default, alerts.
+
+@state-success-text:             @dell-green;
+@state-success-bg:               @dell-green;
+
+@state-info-text:                @dell-teal;
+@state-info-bg:                  @dell-teal;
+
+@state-warning-text:             @dell-orange;
+@state-warning-bg:               @dell-orange;
+
+@state-danger-text:              @dell-red;
+@state-danger-bg:                @dell-red;
+
+//== Tooltips
+//
+//##
+
+//** Tooltip max width
+@tooltip-max-width:           125px;
+//** Tooltip text color
+@tooltip-color:               @dell-gray-dark;
+//** Tooltip background color
+@tooltip-bg:                  @white;
+@tooltip-opacity:             1;
+
+//** Tooltip arrow width
+@tooltip-arrow-width:         7px;
+//** Tooltip arrow color
+@tooltip-arrow-color:         @dell-gray-stroke;
+
+//== Popovers
+//
+//##
+
+//** Popover body background color
+@popover-bg:                          @white;
+//** Popover border color
+@popover-border-color:                @dell-gray-stroke;
+//** Popover fallback border color
+@popover-fallback-border-color:       @dell-gray-stroke;
+
+//** Popover title background color
+@popover-title-bg:                    @white;
+
+//** Popover arrow color
+@popover-arrow-color:                 @white;
+
+//** Popover outer arrow color
+@popover-arrow-outer-color:           darken(@dell-gray-stroke, 7%);
+//** Popover outer arrow fallback color
+@popover-arrow-outer-fallback-color:  darken(@dell-gray-stroke, 7%);
+
+//== Labels
+//
+//##
+
+//** Default label text color
+@label-color:                 @white;
+//** Default text color of a linked label
+@label-link-hover-color:      @white;
+
+
+//== Modals
+//
+//##
+
+//** Padding applied to the modal body
+@modal-inner-padding:         20px;
+
+//** Background color of modal content area
+@modal-content-bg:                             @white;
+
+//** Modal backdrop background color
+@modal-backdrop-bg:           @black;
+//** Modal header border color
+@modal-header-border-color:   @dell-gray-stroke;
+
+//== Progress bars
+//
+//##
+
+//** Progress bar text color
+@progress-bar-color:          @white;
+
+//== List group
+//
+//##
+
+//** `.list-group-item` border color
+@list-group-border:             @dell-gray-stroke;
+
+//** Background color of single list elements on hover
+@list-group-hover-bg:           @dell-highlight-blue;
+//** Text color of active list elements
+@list-group-active-color:       @white;
+
+//== Panels
+//
+//##
+
+@panel-bg:                    @white;
+
+//** Border color for elements within panels
+@panel-inner-border:          @dell-gray-stroke;
+@panel-default-border:        @dell-gray-stroke;
+@panel-primary-text:          @white;
+@panel-success-text:          @white;
+@panel-info-text:             @white;
+@panel-warning-text:          @white;
+@panel-danger-text:           @white;
+
+//== Thumbnails
+//
+//##
+
+//** Thumbnail border color
+@thumbnail-border:            @dell-gray-stroke;
+
+//== Wells
+//
+//##
+
+@well-bg:                     @gray-light;
+
+//== Badges
+//
+//##
+
+@badge-color:                 @white;
+//** Linked badge text color on hover
+@badge-link-hover-color:      darken(@dell-gray-dark, 5%);
+@badge-bg:                    @dell-gray-dark;
+
+//** Badge background color in active nav link
+@badge-active-bg:             @white;
+
+@badge-border-radius:         9px;
+
+//== Breadcrumbs
+//
+//##
+
+@breadcrumb-padding-horizontal: 0;
+//** Breadcrumb background color
+@breadcrumb-bg:                 transparent;
+//** Breadcrumb text color
+@breadcrumb-color:              @dell-gray-medium;
+//** Text color of current page in the breadcrumb
+@breadcrumb-active-color:       @dell-gray;
+//** Textual separator for between breadcrumb elements
+@breadcrumb-separator:          '\e92e';
+
+
+//== Carousel
+//
+//##
+
+@carousel-control-color:                      @white;
+@carousel-indicator-active-bg:                @white;
+@carousel-indicator-border-color:             @white;
+@carousel-caption-color:                      @white;
+
+//== Close
+//
+//##
+
+@close-color:                 @dell-gray-dark;
+@close-text-shadow:           0 1px 0 @white;
+
+
+//== Type
+//
+//##
+
+//** Headings small color
+@headings-small-color:        @dell-gray-dark;
+//** Blockquote small color
+@blockquote-small-color:      @dell-gray-medium;
+//** Blockquote border color
+@blockquote-border-color:     @dell-gray-light;
+
+
+//LAR: Most of this section has been removed from Bootstrap.
+//== Miscellaneous
+//
+//##
+
+//** Horizontal line color.
+@hr-border:                   @dell-gray;
+
+//** Horizontal offset for forms and lists.
+@component-offset-horizontal: 180px;
+
+@dl-horizontal-breakpoint: 0;
+
+
+
