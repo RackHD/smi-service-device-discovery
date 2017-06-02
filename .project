@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>service-device-discovery</name>
+	<name>smi-service-device-discovery</name>
 	<comment>Project service-server-discovery-wsman created by Buildship.</comment>
 	<projects>
 	</projects>
