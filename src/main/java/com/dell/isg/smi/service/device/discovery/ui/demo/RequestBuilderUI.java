@@ -2,9 +2,13 @@ package com.dell.isg.smi.service.device.discovery.ui.demo;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +28,8 @@ import com.dell.isg.smi.commons.model.device.discovery.DiscoverIPRangeDeviceRequ
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverdDeviceResponse;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceGroupEnum;
 import com.dell.isg.smi.service.device.discovery.manager.IDiscoveryManager;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.icons.VaadinIcons;
@@ -36,6 +40,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -88,7 +93,8 @@ public class RequestBuilderUI extends UI {
 
 	private DiscoverIPRangeDeviceRequests discoverIPRangeDeviceRequests = new DiscoverIPRangeDeviceRequests();
 	private DevicesIpsRequest devicesIpsRequest = new DevicesIpsRequest();
-	private ObjectWriter objectWritter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	private ObjectMapper mapper = new ObjectMapper();
+	//private ObjectWriter objectWritter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
@@ -97,7 +103,19 @@ public class RequestBuilderUI extends UI {
 			@Override
 			public void onSave(DeviceRangeRequest rangeRequest) {
 				try {
-					deviceRangeRequestHandler.addRange(rangeRequest);
+					if (StringUtils.isEmpty(rangeRequest.getId())) {
+						Random randomGenerator = new Random();
+						rangeRequest.setId(""+randomGenerator.nextInt(4));
+						deviceRangeRequestHandler.addRange(rangeRequest);
+					} else {
+						OptionalInt indexOpt = IntStream.range(0, deviceRangeRequestHandler.getRangeSet().size())
+							     .filter(i -> rangeRequest.getId().equals( deviceRangeRequestHandler.getRangeSet().get(i).getId()))
+							     .findFirst();
+						if (indexOpt != null) {
+							deviceRangeRequestHandler.getRangeSet().set(indexOpt.getAsInt(), rangeRequest);
+						}
+						
+					}
 					onDeviceRangeRequestModified();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -177,16 +195,19 @@ public class RequestBuilderUI extends UI {
 		credLayout.addComponents(globalUsername, globalPassword);
 		credPanel.setContent(credLayout);
 		credPanel.setVisible(false);
-		globalCredential.addValueChangeListener(event -> {
-			if (event.getValue() == false) {
-				credPanel.setVisible(false);
-			} else {
-				credPanel.setVisible(true);
-			}
-		});
 
 		Button next = new MButton();
 		next.setIcon(VaadinIcons.ARROW_CIRCLE_RIGHT, "Next");
+		next.setEnabled(false);
+		globalCredential.addValueChangeListener(event -> {
+			if (event.getValue() == false) {
+				credPanel.setVisible(false);
+				next.setEnabled(false);
+			} else {
+				credPanel.setVisible(true);
+				next.setEnabled(true);
+			}
+		});
 		next.addClickListener(event -> {
 			if (globalCredential.getValue() == true && StringUtils.isEmpty(globalUsername.getValue())) {
 				Notification.show("Username :", "Cannot be null or empty !!!. ", Notification.Type.ERROR_MESSAGE);
@@ -233,6 +254,13 @@ public class RequestBuilderUI extends UI {
 
 		Button next = new MButton();
 		next.setIcon(VaadinIcons.ARROW_CIRCLE_RIGHT, "Next");
+		next.setEnabled(false);
+		
+		ipList.addValueChangeListener(event -> {
+			if (!StringUtils.isEmpty(ipList.getValue())) {
+				next.setEnabled(true);
+			}		
+		});
 		next.addClickListener(event -> {
 			if (StringUtils.isEmpty(ipList.getValue())) {
 				Notification.show("IP List :", "Cannot be null or empty !!!. ", Notification.Type.ERROR_MESSAGE);
@@ -382,24 +410,25 @@ public class RequestBuilderUI extends UI {
 	private Panel buildCenterRangePanel() {
 		Panel rangePanel = new Panel();
 		VerticalLayout rangeForm = new VerticalLayout();
+		edit.setEnabled(false);
+		delete.setEnabled(false);
 		grid.asSingleSelect().addValueChangeListener(e -> {
 			boolean hasSelection = !grid.getSelectedItems().isEmpty();
 			edit.setEnabled(hasSelection);
 			delete.setEnabled(hasSelection);
+			buildRange();
 		});
-
+		
 		Button next = new MButton();
 		next.setIcon(VaadinIcons.ARROW_CIRCLE_RIGHT, "Next");
-		next.addClickListener(event -> {
-			if (grid.getSelectedItems().size() <= 0) {
+		next.addClickListener(event -> {	
+			if (deviceRangeRequestHandler.getRangeSet().size() <= 0) {
 				Notification.show("Range :", "You should define atleast one range !!!. ",
 						Notification.Type.ERROR_MESSAGE);
-			} else {
-				Set<DiscoverDeviceRequest> discoverDeviceRequestSet = transformDeviceRangeRequest(
-						grid.getSelectedItems());
-				discoverIPRangeDeviceRequests.setDiscoverIpRangeDeviceRequests(discoverDeviceRequestSet);
+			} else{
+				buildRange();
 			}
-			buildRequest(endpoint.getValue());
+			
 		});
 
 		updateList();
@@ -414,18 +443,33 @@ public class RequestBuilderUI extends UI {
 		return rangePanel;
 
 	}
+	
+	private void buildRange(){
+		if (deviceRangeRequestHandler.getRangeSet().size() > 0) {
+			Set<DiscoverDeviceRequest> discoverDeviceRequestSet = transformDeviceRangeRequest(
+					deviceRangeRequestHandler.getRangeSet());
+			discoverIPRangeDeviceRequests.setDiscoverIpRangeDeviceRequests(discoverDeviceRequestSet);
+		} else {
+			discoverIPRangeDeviceRequests.setDiscoverIpRangeDeviceRequests(new HashSet<DiscoverDeviceRequest>());
+		}
+		buildRequest(endpoint.getValue());
+	}
 
-	private Set<DiscoverDeviceRequest> transformDeviceRangeRequest(Set<DeviceRangeRequest> rangeSet) {
+	private Set<DiscoverDeviceRequest> transformDeviceRangeRequest(List<DeviceRangeRequest> rangeSet) {
 		Set<DiscoverDeviceRequest> discoveryRangeRequestList = new HashSet<DiscoverDeviceRequest>();
 		for (DeviceRangeRequest rangeRequest : rangeSet) {
 			DiscoverDeviceRequest discoverDeviceRequest = new DiscoverDeviceRequest();
-			discoverDeviceRequest.setDeviceType(rangeRequest.getDeviceGroups().stream().toArray(String[]::new));
+			if (!CollectionUtils.isEmpty(rangeRequest.getDeviceGroups())) {
+				discoverDeviceRequest.setDeviceType(rangeRequest.getDeviceGroups().stream().toArray(String[]::new));
+			}
 			discoverDeviceRequest.setDeviceStartIp(rangeRequest.getStartIp());
 			discoverDeviceRequest.setDeviceEndIp(rangeRequest.getEndIp());
-			Credential credential = new Credential();
-			credential.setUserName(rangeRequest.getUsername());
-			credential.setPassword(rangeRequest.getPassword());
-			discoverDeviceRequest.setCredential(credential);
+			if (!StringUtils.isEmpty(rangeRequest.getUsername())) {
+				Credential credential = new Credential();
+				credential.setUserName(rangeRequest.getUsername());
+				credential.setPassword(rangeRequest.getPassword());
+				discoverDeviceRequest.setCredential(credential);
+			}
 			discoveryRangeRequestList.add(discoverDeviceRequest);
 		}
 		return discoveryRangeRequestList;
@@ -433,6 +477,7 @@ public class RequestBuilderUI extends UI {
 
 	public void add(ClickEvent clickEvent) {
 		edit(new DeviceRangeRequest());
+		
 	}
 
 	public void edit(ClickEvent e) {
@@ -442,7 +487,8 @@ public class RequestBuilderUI extends UI {
 	public void remove() {
 		deviceRangeRequestHandler.delete(grid.asSingleSelect().getValue());
 		grid.deselectAll();
-		onDeviceRangeRequestModified();
+		buildRange();
+		updateList();
 
 	}
 
@@ -452,18 +498,21 @@ public class RequestBuilderUI extends UI {
 	}
 
 	public void onDeviceRangeRequestModified() {
-		updateList();
 		deviceRangeRequestForm.closePopup();
+		buildRange();
+		updateList();
 	}
 
 	private void buildRequest(String endpoint) {
+		mapper.setSerializationInclusion(Include.NON_NULL);
 		String value = "";
 		try {
 			if (StringUtils.equals(endpoint, "range")) {
-				value = objectWritter.writeValueAsString(discoverIPRangeDeviceRequests);
+				
+				value = mapper.writer().withDefaultPrettyPrinter().writeValueAsString(discoverIPRangeDeviceRequests);
 				requestAreaRange.setValue(value);
 			} else if (StringUtils.equals(endpoint, "ips")) {
-				value = objectWritter.writeValueAsString(devicesIpsRequest);
+				value = mapper.writer().withDefaultPrettyPrinter().writeValueAsString(devicesIpsRequest);
 				requestAreaIps.setValue(value);
 			}
 		} catch (Exception e) {
@@ -476,7 +525,7 @@ public class RequestBuilderUI extends UI {
 	private void buildResponse(List<DiscoverdDeviceResponse> responseList) {
 		String value = "";
 		try {
-			value = objectWritter.writeValueAsString(responseList);
+			value = mapper.writer().withDefaultPrettyPrinter().writeValueAsString(responseList);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
