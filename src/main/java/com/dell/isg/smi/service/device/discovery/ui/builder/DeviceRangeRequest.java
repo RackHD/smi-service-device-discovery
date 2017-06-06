@@ -1,4 +1,4 @@
-package com.dell.isg.smi.service.device.discovery.ui.demo;
+package com.dell.isg.smi.service.device.discovery.ui.builder;
 
 import java.util.Set;
 

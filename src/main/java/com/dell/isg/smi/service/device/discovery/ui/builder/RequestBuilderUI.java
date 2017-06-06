@@ -1,4 +1,4 @@
-package com.dell.isg.smi.service.device.discovery.ui.demo;
+package com.dell.isg.smi.service.device.discovery.ui.builder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.viritin.button.ConfirmButton;
 import org.vaadin.viritin.button.MButton;
@@ -40,7 +42,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -71,6 +72,8 @@ public class RequestBuilderUI extends UI {
 	DeviceRangeRequestHandler deviceRangeRequestHandler;
 
 	DeviceRangeRequestForm deviceRangeRequestForm = new DeviceRangeRequestForm(this);
+	
+	private static final Logger logger = LoggerFactory.getLogger(RequestBuilderUI.class.getName());
 
 	@Autowired
 	IDiscoveryManager discoveryManager;
@@ -325,8 +328,7 @@ public class RequestBuilderUI extends UI {
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Unable to create json string.");
 			}
 			if (response != null) {
 				buildResponse(response);
@@ -385,8 +387,7 @@ public class RequestBuilderUI extends UI {
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Unable to get the response from the service.");
 			}
 			if (response != null) {
 				buildResponse(response);
@@ -516,8 +517,7 @@ public class RequestBuilderUI extends UI {
 				requestAreaIps.setValue(value);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Unable to build the request.");
 		}
 		
 	}
@@ -527,8 +527,7 @@ public class RequestBuilderUI extends UI {
 		try {
 			value = mapper.writer().withDefaultPrettyPrinter().writeValueAsString(responseList);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Unable to get the response from the service.");
 		}
 		// responseArea.setValue(value);
 		Window subWindow = new Window("Response Window:");

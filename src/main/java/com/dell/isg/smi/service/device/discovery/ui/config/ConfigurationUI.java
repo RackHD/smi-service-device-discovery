@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.viritin.button.ConfirmButton;
 import org.vaadin.viritin.components.DisclosurePanel;
@@ -64,6 +66,8 @@ public class ConfigurationUI extends UI {
 	private ConfigDeviceTypeForm configDeviceTypeForm = new ConfigDeviceTypeForm(this);
     private Button resetBtn = new ConfirmButton(VaadinIcons.FLIP_V,
             "Are you sure you want to reset to default configuration?", this::reset);
+
+    private static final Logger logger = LoggerFactory.getLogger(ConfigurationUI.class.getName());
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
@@ -154,7 +158,7 @@ public class ConfigurationUI extends UI {
 	        	file = new File(tempDir+File.separator+filename);
 	        	fileOutputStream = new FileOutputStream(file);
 	        } catch (Exception e) {
-	        	e.printStackTrace();
+	        	logger.error("Unable to upload the YML file.");
 	        	Notification.show("Error :",
 	                    "Invalid file !!!. Please upload valid YML configuration file !!!. ",
 	                    Notification.Type.ERROR_MESSAGE);
@@ -169,7 +173,7 @@ public class ConfigurationUI extends UI {
 		                "YML Configuration applied successfully !!!. ",
 		                Notification.Type.HUMANIZED_MESSAGE);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Unable to parse the YML file.");
 				Notification.show("Error :",
 	                    "Parsing error !!!. Unable to parse the YML configuration file !!!. ",
 	                    Notification.Type.ERROR_MESSAGE);
