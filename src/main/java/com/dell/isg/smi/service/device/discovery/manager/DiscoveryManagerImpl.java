@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import com.dell.isg.smi.commons.elm.utilities.CustomRecursiveToStringStyle;
+import com.dell.isg.smi.commons.utilities.CustomRecursiveToStringStyle;
 import com.dell.isg.smi.commons.model.common.Credential;
 import com.dell.isg.smi.commons.model.common.DevicesIpsRequest;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverDeviceRequest;
@@ -54,7 +54,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
     RequestScopeDiscoveryCredential requestScopeDiscoveryCredential;
 
     private static final Logger logger = LoggerFactory.getLogger(DiscoveryManagerImpl.class.getName());
-
+    private int IP_PING_THREAD_POOL = 22000;
+    private int DISCOVER_THREAD_POOL = 2000;
 
     @Override
     public List<DiscoverdDeviceResponse> discover(DiscoverIPRangeDeviceRequests discoverIPRangeDeviceRequests) throws Exception {
@@ -187,7 +188,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         logger.trace("Started device identification threads");
         StopWatch watch = new StopWatch();
         watch.start();
-        ExecutorService executor = Executors.newFixedThreadPool(22000);
+        ExecutorService executor = Executors.newFixedThreadPool(IP_PING_THREAD_POOL);
         for (DiscoveredDeviceInfo discoverDeviceResponse : discoverDeviceInfos) {
             if (StringUtils.equalsIgnoreCase(discoverDeviceResponse.getDeviceType(), DiscoveryDeviceTypeEnum.UNKNOWN.name())) {
                 Runnable discoveryIdentificationTask = new DeviceIdentificationThread(discoverDeviceResponse, discoveryDeviceConfigProvider, discoveryDeviceGroupEnum);
@@ -232,7 +233,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         int count = filteredList.size();
         logger.trace(" Device count for Summary Extraction = " + count);
         if (count > 0) {
-            ExecutorService executor = Executors.newFixedThreadPool(2000);
+            ExecutorService executor = Executors.newFixedThreadPool(DISCOVER_THREAD_POOL);
             for (DiscoveredDeviceInfo discoverDeviceInfo : filteredList) {
                 Runnable discoverTask = new SummaryCollectionThread(discoverDeviceInfo);
                 executor.execute(discoverTask);
