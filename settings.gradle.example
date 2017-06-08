@@ -1,2 +1,0 @@
-include ':adapter-cli-storage'
-project(':adapter-cli-storage').projectDir = new File(settingsDir, '../adapter-cli-storage')

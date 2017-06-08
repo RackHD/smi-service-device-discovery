@@ -1,0 +1,2 @@
+include ':smi-lib-commons-model'
+project(':smi-lib-commons-model').projectDir = new File(settingsDir, '../smi-lib-commons-model')

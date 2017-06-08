@@ -53,12 +53,9 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
     @Autowired
     RequestScopeDiscoveryCredential requestScopeDiscoveryCredential;
 
-    private int IP_PING_THREAD_POOL = 22000;
-
-    private int DISCOVER_THREAD_POOL = 2000;
-
     private static final Logger logger = LoggerFactory.getLogger(DiscoveryManagerImpl.class.getName());
-
+    private int IP_PING_THREAD_POOL = 22000;
+    private int DISCOVER_THREAD_POOL = 2000;
 
     @Override
     public List<DiscoverdDeviceResponse> discover(DiscoverIPRangeDeviceRequests discoverIPRangeDeviceRequests) throws Exception {
@@ -79,7 +76,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
                     if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, discoverGroupName) && !StringUtils.equals(discoverGroupName, DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
                         DiscoveryDeviceGroupEnum discoverGroup = DiscoveryDeviceGroupEnum.valueOf(discoverGroupName);
                         if (identifyDeviceType((List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice()), discoverGroup)) {
-                            for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceNameByGroup(discoverGroup)) {
+                            for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(discoverGroup)) {
                                 discoveredDeviceInfos.addAll(CollectionUtils.select(discoverDeviceInfos, predicateDeviceInfo(deviceName)));
                             }
                         }
@@ -176,7 +173,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
             if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, discoverGroupName) && !StringUtils.equals(discoverGroupName, DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
                 DiscoveryDeviceGroupEnum discoverGroup = DiscoveryDeviceGroupEnum.valueOf(discoverGroupName);
                 if (identifyDeviceType((List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice()), discoverGroup)) {
-                    for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceNameByGroup(discoverGroup)) {
+                    for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(discoverGroup)) {
                         discoveredDeviceInfos.addAll(CollectionUtils.select(discoverDeviceInfos, predicateDeviceInfo(deviceName)));
                     }
                 }
@@ -273,7 +270,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         DiscoverdDeviceResponse discoverdDeviceResponse = new DiscoverdDeviceResponse();
         discoverdDeviceResponse.setDeviceGroup(enumGroupName.value());
         List<DiscoveredDeviceTypes> discoveredDeviceTypesList = new ArrayList<DiscoveredDeviceTypes>();
-        for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceNameByGroup(enumGroupName)) {
+        for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(enumGroupName)) {
             DiscoveredDeviceTypes discoveredDeviceTypes = new DiscoveredDeviceTypes();
             discoveredDeviceTypes.setDeviceName(deviceName);
             Collection<DiscoveredDeviceInfo> discoveredDeviceInfosListByDeviceName = CollectionUtils.select(discoveredDeviceInfos, predicateDeviceInfo(deviceName));
@@ -343,7 +340,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         }
         for (String credentialGroupName : credentialGroupNames) {
             if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, credentialGroupName)) {
-                List<String> deviceTypeNmes = discoveryDeviceConfigProvider.getAllDeviceNameByGroup(DiscoveryDeviceGroupEnum.valueOf(credentialGroupName));
+                List<String> deviceTypeNmes = discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(DiscoveryDeviceGroupEnum.valueOf(credentialGroupName));
                 for (String name : deviceTypeNmes) {
                     requestScopeDiscoveryCredential.add(name.toUpperCase(), rangeCredential);
                 }

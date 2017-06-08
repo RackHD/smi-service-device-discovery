@@ -18,7 +18,7 @@ import com.dell.isg.smi.commons.model.device.discovery.DiscoveredDeviceInfo;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceStatus;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceTypeEnum;
 import com.dell.isg.smi.commons.model.device.discovery.config.DeviceDefaultCredential;
-import com.dell.isg.smi.commons.model.device.discovery.config.DiscoveryDeviceType;
+import com.dell.isg.smi.commons.model.device.discovery.config.DeviceType;
 import com.dell.isg.smi.commons.model.server.inventory.HwSystem;
 import com.dell.isg.smi.service.device.discovery.config.DiscoveryDeviceConfigProvider;
 import com.dell.isg.smi.service.device.discovery.manager.threads.RequestScopeDiscoveryCredential;
@@ -82,11 +82,11 @@ public class ExtractDeviceSummaryUtil {
 
 
     private static void extractSummaryThouWsman(DiscoveredDeviceInfo discoverDeviceInfo) throws Exception {
-        DiscoveryDeviceType discoveryDeviceType = discoveryDeviceConfigProvider.getDiscoveryDeviceTypeByType(DiscoveryDeviceTypeEnum.valueOf(discoverDeviceInfo.getDeviceType()));
-        DeviceDefaultCredential deviceDefaultCredential = discoveryDeviceType.getDiscoveryRules().getDeviceDefaultCredential();
-        String user = deviceDefaultCredential.getUser();
+    	DeviceType deviceType = discoveryDeviceConfigProvider.getDeviceType(DiscoveryDeviceTypeEnum.valueOf(discoverDeviceInfo.getDeviceType()));
+        DeviceDefaultCredential deviceDefaultCredential = deviceType.getDeviceDefaultCredential();
+        String user = deviceDefaultCredential.getUsername();
         String password = deviceDefaultCredential.getPassword();
-        Credential credential = requestScopeDiscoveryCredential.getCredential(discoveryDeviceType.getDiscoveryDeviceName());
+        Credential credential = requestScopeDiscoveryCredential.getCredential(deviceType.getName());
         if (credential != null && !StringUtils.isEmpty(credential.getUserName())) {
             user = credential.getUserName();
             password = credential.getPassword();
@@ -105,11 +105,11 @@ public class ExtractDeviceSummaryUtil {
 
 
     private static void extractSummaryThouRacadm(DiscoveredDeviceInfo discoverDeviceInfo) throws Exception {
-        DiscoveryDeviceType discoveryDeviceType = discoveryDeviceConfigProvider.getDiscoveryDeviceTypeByType(DiscoveryDeviceTypeEnum.valueOf(discoverDeviceInfo.getDeviceType()));
-        DeviceDefaultCredential deviceDefaultCredential = discoveryDeviceType.getDiscoveryRules().getDeviceDefaultCredential();
-        String user = deviceDefaultCredential.getUser();
+    	DeviceType deviceType = discoveryDeviceConfigProvider.getDeviceType(DiscoveryDeviceTypeEnum.valueOf(discoverDeviceInfo.getDeviceType()));
+        DeviceDefaultCredential deviceDefaultCredential = deviceType.getDeviceDefaultCredential();
+        String user = deviceDefaultCredential.getUsername();
         String password = deviceDefaultCredential.getPassword();
-        Credential credential = requestScopeDiscoveryCredential.getCredential(discoveryDeviceType.getDiscoveryDeviceName());
+        Credential credential = requestScopeDiscoveryCredential.getCredential(deviceType.getName());
         if (credential != null && !StringUtils.isEmpty(credential.getUserName())) {
             user = credential.getUserName();
             password = credential.getPassword();
