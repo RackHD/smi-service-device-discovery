@@ -54,16 +54,6 @@ discoveryConfig:
           command: "https://%s/cgi-bin/discover"
           deviceType:
              -
-               name: "CMC"
-               identifyBy: "REGULAR" 
-               identifier: 
-                  -
-                    text: "<ENDPOINTTYPE>CMC</ENDPOINTTYPE>"
-               deviceDefaultCredential: 
-                  username: "root"
-                  password: "calvin"
-               enabled: true
-             -
                name: "CMC_FX2"
                identifyBy: "REGULAR" 
                identifier: 
@@ -83,6 +73,16 @@ discoveryConfig:
                     text: "<ENDPOINTTYPE>CMC</ENDPOINTTYPE>"
                  -
                    text: "<ENDPOINTVER>2.0</ENDPOINTVER>"
+               deviceDefaultCredential: 
+                  username: "root"
+                  password: "calvin"
+               enabled: true
+             -
+               name: "CMC"
+               identifyBy: "REGULAR" 
+               identifier: 
+                  -
+                    text: "<ENDPOINTTYPE>CMC</ENDPOINTTYPE>"
                deviceDefaultCredential: 
                   username: "root"
                   password: "calvin"

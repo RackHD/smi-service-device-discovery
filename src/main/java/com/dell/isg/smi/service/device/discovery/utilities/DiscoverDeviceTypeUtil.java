@@ -15,6 +15,7 @@ import java.util.List;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -39,6 +40,7 @@ import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceStatus;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceTypeEnum;
 import com.dell.isg.smi.commons.model.device.discovery.config.DeviceType;
 import com.dell.isg.smi.commons.model.device.discovery.config.Identifier;
+import com.dell.isg.smi.commons.utilities.CustomRecursiveToStringStyle;
 import com.dell.isg.smi.service.device.discovery.manager.threads.RequestScopeDiscoveryCredential;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
@@ -84,7 +86,7 @@ public class DiscoverDeviceTypeUtil {
 			}
 			if (isDeviceIdentified){
 				discoverDeviceInfo.setDeviceType(deviceType.getName());
-				discoverDeviceInfo.setStatus(DiscoveryDeviceStatus.DEVICE_IDENTFIED.name());
+				discoverDeviceInfo.setStatus(DiscoveryDeviceStatus.DEVICE_IDENTFIED.name());		        
 			}
 		}
 		
