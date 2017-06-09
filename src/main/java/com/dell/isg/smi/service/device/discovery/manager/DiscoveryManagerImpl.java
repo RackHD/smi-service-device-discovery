@@ -75,7 +75,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
                 for (String discoverGroupName : discoverGroupNames) {
                     if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, discoverGroupName) && !StringUtils.equals(discoverGroupName, DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
                         DiscoveryDeviceGroupEnum discoverGroup = DiscoveryDeviceGroupEnum.valueOf(discoverGroupName);
-                        if (identifyDeviceType((List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice()), discoverGroup)) {
+                        List<DiscoveredDeviceInfo> filteredList = (List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice());
+                        if (identifyDeviceType(filteredList, discoverGroup)) {
                             for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(discoverGroup)) {
                                 discoveredDeviceInfos.addAll(CollectionUtils.select(discoverDeviceInfos, predicateDeviceInfo(deviceName)));
                             }
@@ -87,68 +88,6 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         }
         return getDiscoveredDeviceSummary(discoverDeviceInfosSummaryList);
     }
-
-
-    // @Override
-    // public List<DiscoverdDeviceResponse>
-    // discover(DiscoverIPRangeDeviceRequests discoverIPRangeDeviceRequests)
-    // throws Exception {
-    // Credential globalCredential =
-    // discoverIPRangeDeviceRequests.getCredential();
-    // List<DiscoveredDeviceInfo> discoverDeviceInfosSummaryList = new
-    // ArrayList<DiscoveredDeviceInfo>();
-    // Set<DiscoverDeviceRequest> discoverDeviceRequests =
-    // discoverIPRangeDeviceRequests
-    // .getDiscoverIpRangeDeviceRequests();
-    // if (!CollectionUtils.isEmpty(discoverDeviceRequests)) {
-    // for (DiscoverDeviceRequest discoverDeviceRequest :
-    // discoverDeviceRequests) {
-    // Future<List<DiscoveredDeviceInfo>> callbackFutureList =
-    // Executors.newFixedThreadPool(discoverDeviceRequests.size())
-    // .submit(new Callable<List<DiscoveredDeviceInfo>>() {
-    // public List<DiscoveredDeviceInfo> call() throws Exception {
-    // List<DiscoveredDeviceInfo> discoverDeviceInfos =
-    // getValidDevicesForDiscovery(
-    // discoverDeviceRequest);
-    // Credential rangeCredential = discoverDeviceRequest.getCredential();
-    // String[] discoverGroupNames = discoverDeviceRequest.getDeviceType();
-    // overrideCredentials(globalCredential, rangeCredential,
-    // discoverGroupNames);
-    // if (ArrayUtils.isEmpty(discoverGroupNames)) {
-    // discoverGroupNames = Stream.of(DiscoveryDeviceGroupEnum.values())
-    // .map(DiscoveryDeviceGroupEnum::name).toArray(String[]::new);
-    // }
-    // List<DiscoveredDeviceInfo> discoveredDeviceInfos = new
-    // ArrayList<DiscoveredDeviceInfo>();
-    // for (String discoverGroupName : discoverGroupNames) {
-    // if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class,
-    // discoverGroupName)
-    // && !StringUtils.equals(discoverGroupName,
-    // DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
-    // DiscoveryDeviceGroupEnum discoverGroup =
-    // DiscoveryDeviceGroupEnum.valueOf(discoverGroupName);
-    // if (identifyDeviceType((List<DiscoveredDeviceInfo>)
-    // CollectionUtils.select(discoverDeviceInfos,
-    // predicateDeviceInfo(DiscoveryDeviceTypeEnum.UNKNOWN.name())),
-    // discoverGroup)) {
-    // for (String deviceName :
-    // discoveryDeviceConfigProvider.getAllDeviceNameByGroup(discoverGroup)) {
-    // discoveredDeviceInfos
-    // .addAll(CollectionUtils.select(discoverDeviceInfos,
-    // predicateDeviceInfo(deviceName)));
-    // }
-    // }
-    // }
-    // }
-    // runSummaryCollection(discoveredDeviceInfos);
-    // return discoveredDeviceInfos;
-    // }
-    // });
-    // discoverDeviceInfosSummaryList.addAll(callbackFutureList.get());
-    // }
-    // }
-    // return getDiscoveredDeviceSummary(discoverDeviceInfosSummaryList);
-    // }
 
     @Override
     public List<DiscoverdDeviceResponse> discover(DevicesIpsRequest deviceIps) throws Exception {
@@ -172,7 +111,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         for (String discoverGroupName : discoverGroupNames) {
             if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, discoverGroupName) && !StringUtils.equals(discoverGroupName, DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
                 DiscoveryDeviceGroupEnum discoverGroup = DiscoveryDeviceGroupEnum.valueOf(discoverGroupName);
-                if (identifyDeviceType((List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice()), discoverGroup)) {
+                List<DiscoveredDeviceInfo> filteredList = (List<DiscoveredDeviceInfo>) CollectionUtils.select(discoverDeviceInfos, predicateReachableUndiscoveredDevice());
+                if (identifyDeviceType(filteredList, discoverGroup)) {
                     for (String deviceName : discoveryDeviceConfigProvider.getAllDeviceTypeNameByGroup(discoverGroup)) {
                         discoveredDeviceInfos.addAll(CollectionUtils.select(discoverDeviceInfos, predicateDeviceInfo(deviceName)));
                     }
@@ -289,8 +229,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
             public boolean evaluate(DiscoveredDeviceInfo deviceInfo) {
                 if (deviceInfo == null) {
                     return false;
-                }
-                return !StringUtils.equalsIgnoreCase(deviceInfo.getStatus(), DiscoveryDeviceStatus.NO_DEVICE.name());
+                }  
+                return !Arrays.asList(DiscoveryDeviceStatus.NO_DEVICE.name(), DiscoveryDeviceStatus.DEVICE_IDENTFIED.name()).contains(deviceInfo.getStatus());
             }
         };
     }

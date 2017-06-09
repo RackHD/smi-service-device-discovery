@@ -328,6 +328,7 @@ public class RequestBuilderUI extends UI {
 					}
 				}
 			} catch (Exception e) {
+				Notification.show("Request Builder :", "Unable to create json string. !!!. ", Notification.Type.ERROR_MESSAGE);
 				logger.error("Unable to create json string.");
 			}
 			if (response != null) {
@@ -387,6 +388,7 @@ public class RequestBuilderUI extends UI {
 					}
 				}
 			} catch (Exception e) {
+				Notification.show("Get Response :", "Unable to get the response from the service. !!!. ", Notification.Type.ERROR_MESSAGE);
 				logger.error("Unable to get the response from the service.");
 			}
 			if (response != null) {
@@ -517,6 +519,7 @@ public class RequestBuilderUI extends UI {
 				requestAreaIps.setValue(value);
 			}
 		} catch (Exception e) {
+			Notification.show("Request Builder :", "Unable to build the request. !!!. ", Notification.Type.ERROR_MESSAGE);
 			logger.error("Unable to build the request.");
 		}
 		

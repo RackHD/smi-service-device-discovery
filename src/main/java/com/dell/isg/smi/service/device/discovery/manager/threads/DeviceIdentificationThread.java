@@ -94,7 +94,9 @@ public class DeviceIdentificationThread implements Runnable {
 				isDeviceIdentified = identify(command, DiscoveryDeviceProtocolEnum.fromValue(protocol),
 						enabledDeviceTypeList);
 			}
-
+			if ((Boolean.TRUE == isDeviceIdentified)){
+				break;
+			}
 		}
 		return isDeviceIdentified;
 	}
