@@ -72,8 +72,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
                 overrideCredentials(globalCredential, rangeCredential, discoverGroupNames);
                 if (ArrayUtils.isEmpty(discoverGroupNames)) {
                     discoverGroupNames = Stream.of(DiscoveryDeviceGroupEnum.values()).map(DiscoveryDeviceGroupEnum::name).toArray(String[]::new);
-                    discoverGroupSummaryFilter.addAll(Arrays.asList( discoverGroupNames ));
                 }
+                discoverGroupSummaryFilter.addAll(Arrays.asList( discoverGroupNames ));
                 List<DiscoveredDeviceInfo> discoveredDeviceInfos = new ArrayList<DiscoveredDeviceInfo>();
                 for (String discoverGroupName : discoverGroupNames) {
                     if (EnumUtils.isValidEnum(DiscoveryDeviceGroupEnum.class, discoverGroupName) && !StringUtils.equals(discoverGroupName, DiscoveryDeviceTypeEnum.UNKNOWN.value())) {
@@ -113,8 +113,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         }
         if (ArrayUtils.isEmpty(discoverGroupNames)) {
             discoverGroupNames = Stream.of(DiscoveryDeviceGroupEnum.values()).map(DiscoveryDeviceGroupEnum::name).toArray(String[]::new);
-            discoverGroupSummaryFilter.addAll(Arrays.asList( discoverGroupNames ));
         }
+        discoverGroupSummaryFilter.addAll(Arrays.asList( discoverGroupNames ));
 
         List<DiscoveredDeviceInfo> discoveredDeviceInfos = new ArrayList<DiscoveredDeviceInfo>();
         for (String discoverGroupName : discoverGroupNames) {
@@ -207,8 +207,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
 
     private List<DiscoverdDeviceResponse> getDiscoveredDeviceSummary(List<DiscoveredDeviceInfo> discoveredDeviceInfos, Set<String> discoverGroupSummaryFilter) {
         List<DiscoverdDeviceResponse> discoverdDeviceResponseList = new ArrayList<DiscoverdDeviceResponse>();
-
         for (String groupName : discoverGroupSummaryFilter) {
+        //for (DiscoveryDeviceGroupEnum enumGroupName : DiscoveryDeviceGroupEnum.values()) {
         	DiscoveryDeviceGroupEnum enumGroupName = DiscoveryDeviceGroupEnum.fromValue(groupName);
             DiscoverdDeviceResponse discoverdDeviceResponse = constructDiscoverdDeviceResponse(discoveredDeviceInfos, enumGroupName);
             discoverdDeviceResponseList.add(discoverdDeviceResponse);
