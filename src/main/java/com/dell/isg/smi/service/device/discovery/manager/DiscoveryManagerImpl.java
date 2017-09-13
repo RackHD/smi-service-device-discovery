@@ -130,7 +130,6 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
             }
         }
         runSummaryCollection(discoveredDeviceInfos);
-        System.out.println(discoverGroupSummaryFilter);
         return getDiscoveredDeviceSummary(discoveredDeviceInfos, discoverGroupSummaryFilter);
     }
 
