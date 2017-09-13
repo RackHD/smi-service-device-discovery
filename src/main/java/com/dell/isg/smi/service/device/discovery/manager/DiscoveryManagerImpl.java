@@ -43,6 +43,7 @@ import com.dell.isg.smi.service.device.discovery.manager.threads.DeviceIdentific
 import com.dell.isg.smi.service.device.discovery.manager.threads.RequestScopeDiscoveryCredential;
 import com.dell.isg.smi.service.device.discovery.manager.threads.SummaryCollectionThread;
 import com.dell.isg.smi.service.device.discovery.validation.IPRangeValidatorUtil;
+import com.dell.isg.smi.service.device.discovery.validation.Inet4ConverterValidator;
 
 @Component
 public class DiscoveryManagerImpl implements IDiscoveryManager {
@@ -62,6 +63,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         Credential globalCredential = discoverIPRangeDeviceRequests.getCredential();
         List<DiscoveredDeviceInfo> discoverDeviceInfosSummaryList = new ArrayList<DiscoveredDeviceInfo>();
         Set<DiscoverDeviceRequest> discoverDeviceRequests = discoverIPRangeDeviceRequests.getDiscoverIpRangeDeviceRequests();
+        Set<String> discoverGroupSummaryFilter = new HashSet<String>();
         if (!CollectionUtils.isEmpty(discoverDeviceRequests)) {
             for (DiscoverDeviceRequest discoverDeviceRequest : discoverDeviceRequests) {
                 List<DiscoveredDeviceInfo> discoverDeviceInfos = getValidDevicesForDiscovery(discoverDeviceRequest);
@@ -70,6 +72,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
                 overrideCredentials(globalCredential, rangeCredential, discoverGroupNames);
                 if (ArrayUtils.isEmpty(discoverGroupNames)) {
                     discoverGroupNames = Stream.of(DiscoveryDeviceGroupEnum.values()).map(DiscoveryDeviceGroupEnum::name).toArray(String[]::new);
+                    discoverGroupSummaryFilter.addAll(Arrays.asList( discoverGroupNames ));
                 }
                 List<DiscoveredDeviceInfo> discoveredDeviceInfos = new ArrayList<DiscoveredDeviceInfo>();
                 for (String discoverGroupName : discoverGroupNames) {
@@ -86,7 +89,7 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
                 discoverDeviceInfosSummaryList.addAll(runSummaryCollection(discoveredDeviceInfos));
             }
         }
-        return getDiscoveredDeviceSummary(discoverDeviceInfosSummaryList);
+        return getDiscoveredDeviceSummary(discoverDeviceInfosSummaryList, discoverGroupSummaryFilter);
     }
 
     @Override
@@ -94,17 +97,23 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         List<DiscoveredDeviceInfo> discoverDeviceInfos = new ArrayList<DiscoveredDeviceInfo>();
         Credential globalCredential = deviceIps.getCredential();
         String[] discoverGroupNames = deviceIps.getDeviceType();
+        Set<String> discoverGroupSummaryFilter = new HashSet<String>();
         if (globalCredential != null && !StringUtils.isEmpty(globalCredential.getUserName())) {
             overrideRangeCredentials(globalCredential, deviceIps.getDeviceType());
         }
         Set<String> ips = Arrays.stream(deviceIps.getIps()).collect(Collectors.toSet());
         for (String validIp : ips) {
+        	if (!Inet4ConverterValidator.isValidIpAddress(validIp)) {
+        		String msg = "Invalid IP";
+                throw new IllegalArgumentException(msg);
+        	}
             DiscoveredDeviceInfo deviceInfo = new DiscoveredDeviceInfo();
             deviceInfo.setIpAddress(validIp);
             discoverDeviceInfos.add(deviceInfo);
         }
         if (ArrayUtils.isEmpty(discoverGroupNames)) {
             discoverGroupNames = Stream.of(DiscoveryDeviceGroupEnum.values()).map(DiscoveryDeviceGroupEnum::name).toArray(String[]::new);
+            discoverGroupSummaryFilter.addAll(Arrays.asList( discoverGroupNames ));
         }
 
         List<DiscoveredDeviceInfo> discoveredDeviceInfos = new ArrayList<DiscoveredDeviceInfo>();
@@ -120,7 +129,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
             }
         }
         runSummaryCollection(discoveredDeviceInfos);
-        return getDiscoveredDeviceSummary(discoveredDeviceInfos);
+        System.out.println(discoverGroupSummaryFilter);
+        return getDiscoveredDeviceSummary(discoveredDeviceInfos, discoverGroupSummaryFilter);
     }
 
 
@@ -195,10 +205,11 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
     }
 
 
-    private List<DiscoverdDeviceResponse> getDiscoveredDeviceSummary(List<DiscoveredDeviceInfo> discoveredDeviceInfos) {
+    private List<DiscoverdDeviceResponse> getDiscoveredDeviceSummary(List<DiscoveredDeviceInfo> discoveredDeviceInfos, Set<String> discoverGroupSummaryFilter) {
         List<DiscoverdDeviceResponse> discoverdDeviceResponseList = new ArrayList<DiscoverdDeviceResponse>();
 
-        for (DiscoveryDeviceGroupEnum enumGroupName : DiscoveryDeviceGroupEnum.values()) {
+        for (String groupName : discoverGroupSummaryFilter) {
+        	DiscoveryDeviceGroupEnum enumGroupName = DiscoveryDeviceGroupEnum.fromValue(groupName);
             DiscoverdDeviceResponse discoverdDeviceResponse = constructDiscoverdDeviceResponse(discoveredDeviceInfos, enumGroupName);
             discoverdDeviceResponseList.add(discoverdDeviceResponse);
         }

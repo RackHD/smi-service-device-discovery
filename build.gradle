@@ -91,8 +91,8 @@ springBoot {
 repositories {
 	maven {url "http://repository.springsource.com/maven/bundles/release" }
     maven {url "http://repository.springsource.com/maven/bundles/external"}
-	maven {url "${artifactory_contextUrl}/${dependency_repo}"}
-	maven {url "${artifactory_contextUrl}/libs-release"}
+	//maven {url "${artifactory_contextUrl}/${dependency_repo}"}
+	//maven {url "${artifactory_contextUrl}/libs-release"}
 	maven {url "https://plugins.gradle.org/m2/"}
 	maven {url "http://maven.vaadin.com/vaadin-addons" }
 	mavenLocal()

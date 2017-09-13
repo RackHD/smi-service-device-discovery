@@ -51,9 +51,13 @@ public class DeviceDiscoveryController {
         try {
             response = discoveryManager.discover(discoverIPRangeDeviceRequests);
         } catch (Exception e) {
-            logger.error("Exception occured in discovery : ", e);
-            RuntimeCoreException runtimeCoreException = new RuntimeCoreException(e);
-            runtimeCoreException.setErrorCode(EnumErrorCode.ENUM_SERVER_ERROR);
+        	RuntimeCoreException runtimeCoreException = new RuntimeCoreException(e);
+        	if (e instanceof IllegalArgumentException) {
+        		runtimeCoreException.setErrorCode(EnumErrorCode.IOIDENTITY_INVALID_INPUT);
+        	}else {
+        		runtimeCoreException.setErrorCode(EnumErrorCode.ENUM_SERVER_ERROR);
+        	}
+    		logger.error("Exception occured in discovery : ", e);
             throw runtimeCoreException;
         }
         logger.trace("Discovery Response : {} ", ReflectionToStringBuilder.toString(response, new CustomRecursiveToStringStyle(99)));
@@ -76,8 +80,12 @@ public class DeviceDiscoveryController {
             response = discoveryManager.discover(deviceIps);
         } catch (Exception e) {
             logger.error("Exception occured in discovery : ", e);
-            RuntimeCoreException runtimeCoreException = new RuntimeCoreException(e);
-            runtimeCoreException.setErrorCode(EnumErrorCode.ENUM_SERVER_ERROR);
+        	RuntimeCoreException runtimeCoreException = new RuntimeCoreException(e);
+        	if (e instanceof IllegalArgumentException) {
+        		runtimeCoreException.setErrorCode(EnumErrorCode.IOIDENTITY_INVALID_INPUT);
+        	}else {
+        		runtimeCoreException.setErrorCode(EnumErrorCode.ENUM_SERVER_ERROR);
+        	}
             throw runtimeCoreException;
         }
         logger.trace("Discovery Response : {} ", ReflectionToStringBuilder.toString(response, new CustomRecursiveToStringStyle(99)));
