@@ -208,7 +208,6 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
     private List<DiscoverdDeviceResponse> getDiscoveredDeviceSummary(List<DiscoveredDeviceInfo> discoveredDeviceInfos, Set<String> discoverGroupSummaryFilter) {
         List<DiscoverdDeviceResponse> discoverdDeviceResponseList = new ArrayList<DiscoverdDeviceResponse>();
         for (String groupName : discoverGroupSummaryFilter) {
-        //for (DiscoveryDeviceGroupEnum enumGroupName : DiscoveryDeviceGroupEnum.values()) {
         	DiscoveryDeviceGroupEnum enumGroupName = DiscoveryDeviceGroupEnum.fromValue(groupName);
             DiscoverdDeviceResponse discoverdDeviceResponse = constructDiscoverdDeviceResponse(discoveredDeviceInfos, enumGroupName);
             discoverdDeviceResponseList.add(discoverdDeviceResponse);
