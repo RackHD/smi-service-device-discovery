@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import com.dell.isg.smi.commons.utilities.CustomRecursiveToStringStyle;
+import com.dell.isg.smi.commons.elm.exception.InvalidArgumentsException;
 import com.dell.isg.smi.commons.model.common.Credential;
 import com.dell.isg.smi.commons.model.common.DevicesIpsRequest;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverDeviceRequest;
@@ -104,8 +105,8 @@ public class DiscoveryManagerImpl implements IDiscoveryManager {
         Set<String> ips = Arrays.stream(deviceIps.getIps()).collect(Collectors.toSet());
         for (String validIp : ips) {
         	if (!Inet4ConverterValidator.isValidIpAddress(validIp)) {
-        		String msg = "Invalid IP";
-                throw new IllegalArgumentException(msg);
+        		String msg = "IPs";
+                throw new InvalidArgumentsException(msg);
         	}
             DiscoveredDeviceInfo deviceInfo = new DiscoveredDeviceInfo();
             deviceInfo.setIpAddress(validIp);
