@@ -29,28 +29,24 @@ public class IPRangeValidatorUtil {
     public static List<String> expandIpAddresses(DiscoverDeviceRequest discoverIpRange) throws Exception {
         List<String> ipAddresslist = new ArrayList<>();
 
-        try {
-            if (discoverIpRange.getDeviceStartIp() == null || discoverIpRange.getDeviceStartIp().isEmpty()) {
-                String msg = "IP or range";
-                throw new InvalidArgumentsException(msg);
-            } else if (discoverIpRange.getDeviceEndIp() == null || discoverIpRange.getDeviceEndIp().isEmpty()) {
-                // just add the first IP
-                new ValidatedInet4Address(discoverIpRange.getDeviceStartIp());
-                ipAddresslist.add(discoverIpRange.getDeviceStartIp());
-            } else {
+        if (discoverIpRange.getDeviceStartIp() == null || discoverIpRange.getDeviceStartIp().isEmpty()) {
+            String msg = "IP or range";
+            throw new InvalidArgumentsException(msg);
+        } else if (discoverIpRange.getDeviceEndIp() == null || discoverIpRange.getDeviceEndIp().isEmpty()) {
+            // just add the first IP
+            new ValidatedInet4Address(discoverIpRange.getDeviceStartIp());
+            ipAddresslist.add(discoverIpRange.getDeviceStartIp());
+        } else {
 
-                // First check if IPs first 3 parts are same
-                validateIpSameSubnet(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
+            // First check if IPs first 3 parts are same
+            validateIpSameSubnet(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
 
-                // we have the range specified
-                ValidatedInet4Range validatedRange = new ValidatedInet4Range(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
-                List<String> addressStrings = validatedRange.getAddressStrings();
-                for (String address : addressStrings) {
-                    ipAddresslist.add(address);
-                }
+            // we have the range specified
+            ValidatedInet4Range validatedRange = new ValidatedInet4Range(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
+            List<String> addressStrings = validatedRange.getAddressStrings();
+            for (String address : addressStrings) {
+                ipAddresslist.add(address);
             }
-        } catch (RuntimeException re) {
-            throw new InvalidArgumentsException(re.getMessage());
         }
         return ipAddresslist;
     }

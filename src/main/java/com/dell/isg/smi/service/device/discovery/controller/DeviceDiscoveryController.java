@@ -45,7 +45,7 @@ public class DeviceDiscoveryController {
         List<DiscoverdDeviceResponse> response = null;
         if (discoverIPRangeDeviceRequests == null) {
             BadRequestException badRequestException = new BadRequestException();
-            badRequestException.setErrorCode(EnumErrorCode.IOIDENTITY_INVALID_INPUT);
+            badRequestException.setErrorCode(EnumErrorCode.ENUM_INVALIDINPUT_ERROR);
             throw badRequestException;
         }
         response = discoveryManager.discover(discoverIPRangeDeviceRequests);
@@ -62,7 +62,7 @@ public class DeviceDiscoveryController {
         logger.trace("Ips submitted for discovery : {} ", ReflectionToStringBuilder.toString(deviceIps, new CustomRecursiveToStringStyle(99)));
         if (deviceIps == null) {
             BadRequestException badRequestException = new BadRequestException();
-            badRequestException.setErrorCode(EnumErrorCode.IOIDENTITY_INVALID_INPUT);
+            badRequestException.setErrorCode(EnumErrorCode.ENUM_INVALIDINPUT_ERROR);
             throw badRequestException;
         }
         response = discoveryManager.discover(deviceIps);
