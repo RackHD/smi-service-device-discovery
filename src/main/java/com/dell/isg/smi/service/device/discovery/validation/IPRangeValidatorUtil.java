@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dell.isg.smi.commons.elm.exception.InvalidArgumentsException;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverDeviceRequest;
 
 public class IPRangeValidatorUtil {
@@ -28,28 +29,24 @@ public class IPRangeValidatorUtil {
     public static List<String> expandIpAddresses(DiscoverDeviceRequest discoverIpRange) throws Exception {
         List<String> ipAddresslist = new ArrayList<>();
 
-        try {
-            if (discoverIpRange.getDeviceStartIp() == null || discoverIpRange.getDeviceStartIp().isEmpty()) {
-                String msg = "invalid IP or range";
-                throw new IllegalArgumentException(msg);
-            } else if (discoverIpRange.getDeviceEndIp() == null || discoverIpRange.getDeviceEndIp().isEmpty()) {
-                // just add the first IP
-                new ValidatedInet4Address(discoverIpRange.getDeviceStartIp());
-                ipAddresslist.add(discoverIpRange.getDeviceStartIp());
-            } else {
+        if (discoverIpRange.getDeviceStartIp() == null || discoverIpRange.getDeviceStartIp().isEmpty()) {
+            String msg = "IP or range";
+            throw new InvalidArgumentsException(msg);
+        } else if (discoverIpRange.getDeviceEndIp() == null || discoverIpRange.getDeviceEndIp().isEmpty()) {
+            // just add the first IP
+            new ValidatedInet4Address(discoverIpRange.getDeviceStartIp());
+            ipAddresslist.add(discoverIpRange.getDeviceStartIp());
+        } else {
 
-                // First check if IPs first 3 parts are same
-                validateIpSameSubnet(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
+            // First check if IPs first 3 parts are same
+            validateIpSameSubnet(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
 
-                // we have the range specified
-                ValidatedInet4Range validatedRange = new ValidatedInet4Range(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
-                List<String> addressStrings = validatedRange.getAddressStrings();
-                for (String address : addressStrings) {
-                    ipAddresslist.add(address);
-                }
+            // we have the range specified
+            ValidatedInet4Range validatedRange = new ValidatedInet4Range(discoverIpRange.getDeviceStartIp(), discoverIpRange.getDeviceEndIp());
+            List<String> addressStrings = validatedRange.getAddressStrings();
+            for (String address : addressStrings) {
+                ipAddresslist.add(address);
             }
-        } catch (RuntimeException re) {
-            throw new IllegalArgumentException(re.getMessage());
         }
         return ipAddresslist;
     }
@@ -57,8 +54,8 @@ public class IPRangeValidatorUtil {
 
     public static boolean validateIpAddress(String ipAddress) {
         if (ipAddress == null || ipAddress.isEmpty()) {
-            String msg = "invalid IP";
-            throw new IllegalArgumentException(msg);
+            String msg = "IP";
+            throw new InvalidArgumentsException(msg);
         } else {
             new ValidatedInet4Address(ipAddress);
             return true;
@@ -69,7 +66,7 @@ public class IPRangeValidatorUtil {
     public static void validateIpSameSubnet(String ip1, String ip2) throws IllegalArgumentException {
         if ((ip1 != null && !ip1.isEmpty()) && (ip2 != null && !ip2.isEmpty())) {
             if (!ip1.substring(0, ip1.lastIndexOf(".")).equalsIgnoreCase(ip2.substring(0, ip2.lastIndexOf(".")))) {
-                throw new IllegalArgumentException("Invalid IP range: IP not on the same subnet");
+                throw new InvalidArgumentsException(" IP range: IP not on the same subnet");
             }
         }
     }

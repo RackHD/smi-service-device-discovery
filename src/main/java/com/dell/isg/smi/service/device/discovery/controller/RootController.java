@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RootController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String usage() {
-
-        return "SSL ready";
+    public String ping() {
+        return "Discovery Service - Running";
     }
 
 }

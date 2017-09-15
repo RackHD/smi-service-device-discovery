@@ -34,7 +34,6 @@ buildscript {
         cfAppVersion = '1.0.9' 
 	}
    repositories {
-	//maven {url "${artifactory_contextUrl}/libs-release"}
 	maven {url "https://plugins.gradle.org/m2/"}
 	maven {url "http://maven.vaadin.com/vaadin-addons" }
 	mavenLocal()
@@ -91,8 +90,6 @@ springBoot {
 repositories {
 	maven {url "http://repository.springsource.com/maven/bundles/release" }
     maven {url "http://repository.springsource.com/maven/bundles/external"}
-	maven {url "${artifactory_contextUrl}/${dependency_repo}"}
-	maven {url "${artifactory_contextUrl}/libs-release"}
 	maven {url "https://plugins.gradle.org/m2/"}
 	maven {url "http://maven.vaadin.com/vaadin-addons" }
 	mavenLocal()
@@ -102,7 +99,7 @@ repositories {
 dependencies {
     compile 'com.dell.isg.smi:adapter-server:1.0.55'
 	compile 'com.dell.isg.smi:adapter-chassis:1.0.29'
-    compile 'com.dell.isg.smi:commons-elm:1.0.76'
+    compile 'com.dell.isg.smi:commons-elm:1.0.82'
     compile 'com.dell.isg.smi:commons-utilities:1.0.32'
 	compile 'com.dell.isg.smi:commons-model:1.0.89'
 	compile "org.springframework.boot:spring-boot-starter-web"
