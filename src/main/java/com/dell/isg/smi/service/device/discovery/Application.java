@@ -46,9 +46,9 @@ public class Application extends WebMvcConfigurerAdapter {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
-	@Autowired
-	private BuildInfo buildInfo;
+    
+    @Autowired
+    private BuildInfo buildInfo;
 
     @Bean
     public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
@@ -87,12 +87,6 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Bean
     public Docket newsApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("deviceDiscovery").apiInfo(apiInfo()).select().paths(regex("/api.*")).build();
+        return new Docket(DocumentationType.SWAGGER_2).groupName("deviceDiscovery").apiInfo(new ApiInfoBuilder().title("Device Discovery Service").version(buildInfo.toString()).build()).select().paths(regex("/api.*")).build();
     }
-
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Device Discovery ").description("Service for discovering device.").termsOfServiceUrl("http://rackhd.readthedocs.io").license("Apache 2.0").licenseUrl("https://github.com/RackHD/smi-service-device-discovery/blob/master/LICENSE").version(buildInfo.toString()).build();
-    }
-
 }

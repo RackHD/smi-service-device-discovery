@@ -113,3 +113,53 @@ Example fortThe schema of summary response:
 
 Refer Server and Chassis Inventory for more details...
 
+Supported Devices
+~~~~~~~~~~~~~~~~~
+Supported devices group are \{SERVER,CHASSIS and STORAGE (Complellent) - Discovery and brief summary;}
+* VM and SWITCH (Only discovery but NO Summary) 
+Supported device types:
+
+....
+SERVER: 
+   IDRAC7, 
+   IDRAC8,
+
+CHASSIS:
+    CMC,
+    CMC_FX2,
+    CSERVER,
+    VRTX
+    
+SWITCH:
+    FORCE10_S4810,
+    FORCE10_S5000,
+    FORCE10_S6000,
+    FORCE10_S4048,
+    FORCE10_S55
+    BROCADE,
+    POWERCONNECT,
+    POWERCONNECT_N3000,
+    POWERCONNECT_N4000,
+    CISCONEXUS
+
+STORAGE:
+    COMPELLENT,
+
+VM:
+    VCENTER
+....
+
+Licensing
+---------
+
+This docker microservice is available under the
+http://www.apache.org/licenses/LICENSE-2.0.txt[Apache 2.0 License].
+
+Source code for this microservice is available in repositories at
+https://github.com/RackHD.
+
+
+Support
+-------
+
+Slack Channel: codecommunity.slack.com
