@@ -7,6 +7,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.dell.isg.smi.service.device.discovery.config.InnerConfig;
 import com.dell.isg.smi.service.device.discovery.manager.threads.RequestScopeDiscoveryCredential;
+import com.dell.isg.smi.service.device.discovery.BuildInfo;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
@@ -45,6 +47,8 @@ public class Application extends WebMvcConfigurerAdapter {
         SpringApplication.run(Application.class, args);
     }
 
+	@Autowired
+	private BuildInfo buildInfo;
 
     @Bean
     public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
@@ -88,7 +92,7 @@ public class Application extends WebMvcConfigurerAdapter {
 
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("SMI Micro-service : Device discovery ").description("Micro services for device discovery .").termsOfServiceUrl("http://www.dell.com/smi/device/discovery").license("Dell SMI License Version 1.0").licenseUrl("www.dell.com/smi").version("1.0 dev").build();
+        return new ApiInfoBuilder().title("Device Discovery ").description("Service for discovering device.").termsOfServiceUrl("http://rackhd.readthedocs.io").license("Apache 2.0").licenseUrl("https://github.com/RackHD/smi-service-device-discovery/blob/master/LICENSE").version(buildInfo.toString()).build();
     }
 
 }
