@@ -1,0 +1,160 @@
+ Device Summary Response
+------------------------
+
+Based on the device type identified , the summary response schema could be any one of the following..
+
+SERVER
+~~~~~~
+
+Types -  IDRAC7, IDRAC8 and IDRAC9
+
+Example:
+
+-----------------
+{  
+   "id":"100.68.123.39",
+   "activePowerPolicy":null,
+   "assetTag":"",
+   "biosReleaseDate":"",
+   "biosVersionString":"2.4.2",
+   "baseBoardChassisSlot":"Slot 01",
+   "boardPartNumber":"0JXJPTA00",
+   "boardSerialNumber":"CN7016352P00A6",
+   "cmcip":"100.68.123.36",
+   "bladeGeometry":"5",
+   "cpldVersion":"1.0.5",
+   "cpuRollupStatus":"1",
+   "caption":null,
+   "chassisName":"CMC-5VN2D42",
+   "chassisModel":"PowerEdge FX2s",
+   "deviceDescription":"System",
+   "chassisServiceTag":"5VN2D42",
+   "chassisSystemHeight":"2",
+   "currentRollupStatus":"1",
+   "estimatedSystemAirflow":"255",
+   "estimatedExhaustTemperature":"255",
+   "expressServiceCode":"12797151266",
+   "elementName":null,
+   "fqdd":"System.Embedded.1",
+   "fanRollupStatus":"1",
+   "batteryRollupStatus":"1",
+   "generation":null,
+   "hostName":"",
+   "instanceID":"System.Embedded.1",
+   "idsdmRollupStatus":null,
+   "intrusionRollupStatus":null,
+   "lastSystemInventoryTime":"20170915175417.000000+000",
+   "lastUpdateTime":"20170912224518.000000+000",
+   "licensingRollupStatus":"1",
+   "lifecycleControllerVersion":"2.41.40.40",
+   "manufacturer":"Dell Inc.",
+   "maxCpuSockets":"2",
+   "maxDimmSlots":"24",
+   "maxPcieSlots":"3",
+   "memoryOperationMode":"OptimizerMode",
+   "memoryRollupStatus":"1",
+   "model":"PowerEdge FC630",
+   "nodeId":"5VN3D42",
+   "psRollupStatus":"1",
+   "platformGuid":"3234444f-c0b5-3380-4e10-00564c4c4544",
+   "populatedCpuSockets":"2",
+   "populatedDimmSlots":"6",
+   "populatedPcieSlots":"2",
+   "powerCap":"423",
+   "powerCapEnabledState":"3",
+   "powerState":"2",
+   "primaryStatus":"1",
+   "sdCardRollupStatus":null,
+   "rollupStatus":"1",
+   "serverAllocation":"446",
+   "serviceTag":"5VN3D42",
+   "storageRollupStatus":"1",
+   "sysMemErrorInfo":null,
+   "sysMemErrorMethodology":"6",
+   "sysMemFailOverState":"NotInUse",
+   "sysMemLocation":"3",
+   "sysMemPrimaryStatus":"1",
+   "sysMemTotalSize":96,
+   "sysMemMaxCapacitySize":"3145728",
+   "systemGeneration":"13G Modular",
+   "systemID":"1563",
+   "systemRevision":"0",
+   "tempRollupStatus":"1",
+   "tempStatisticsRollupStatus":"1",
+   "uuid":"4c4c4544-0056-4e10-8033-b5c04f443432",
+   "voltRollupStatus":"1",
+   "smbiosGUID":"44454c4c-5600-104e-8033-b5c04f443432"
+}
+-----------------
+
+CHASSIS
+~~~~~~~
+
+Type : CMC, CMC_FX2, CSERVER and VRTX
+
+Example :
+    
+-----------------
+{  
+   "id":"100.68.123.96",
+   "name":"CMC-2LLTW52",
+   "serviceTag":"2LLTW52",
+   "model":"PowerEdge FX2s",
+   "dnsName":"cmc-2LLTW52",
+   "location":"[UNDEFINED]",
+   "totalSlots":2,
+   "freeSlots":1
+}
+-----------------
+
+Supported Devices
+~~~~~~~~~~~~~~~~~
+*SERVER,CHASSIS and STORAGE - Discovery and brief summary.
+*VM and SWITCH - Only discovery but NO Summary
+
+Supported device types:
+....
+SERVER: 
+   IDRAC7 
+   IDRAC8
+   IDRAC9
+
+CHASSIS:
+    CMC
+    CMC_FX2
+    CSERVER
+    VRTX
+    
+SWITCH:
+    FORCE10_S4810
+    FORCE10_S5000
+    FORCE10_S6000
+    FORCE10_S4048
+    FORCE10_S55
+    BROCADE
+    POWERCONNECT
+    POWERCONNECT_N3000
+    POWERCONNECT_N4000
+    CISCONEXUS
+
+STORAGE:
+    COMPELLENT
+
+VM:
+    VCENTER
+....
+
+Licensing
+---------
+
+This docker microservice is available under the
+http://www.apache.org/licenses/LICENSE-2.0.txt[Apache 2.0 License].
+
+Source code for this microservice is available in repositories at
+https://github.com/RackHD.
+
+
+Support
+-------
+
+Slack Channel: codecommunity.slack.com

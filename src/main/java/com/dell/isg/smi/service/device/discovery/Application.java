@@ -7,6 +7,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.dell.isg.smi.service.device.discovery.config.InnerConfig;
 import com.dell.isg.smi.service.device.discovery.manager.threads.RequestScopeDiscoveryCredential;
+import com.dell.isg.smi.service.device.discovery.BuildInfo;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
@@ -44,7 +46,9 @@ public class Application extends WebMvcConfigurerAdapter {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
+    
+    @Autowired
+    private BuildInfo buildInfo;
 
     @Bean
     public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
@@ -83,12 +87,6 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Bean
     public Docket newsApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("deviceDiscovery").apiInfo(apiInfo()).select().paths(regex("/api.*")).build();
+        return new Docket(DocumentationType.SWAGGER_2).groupName("deviceDiscovery").apiInfo(new ApiInfoBuilder().title("SMI Micro-service : Device Discovery").version(buildInfo.toString()).build()).select().paths(regex("/api.*")).build();
     }
-
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("SMI Micro-service : Device discovery ").description("Micro services for device discovery .").termsOfServiceUrl("http://www.dell.com/smi/device/discovery").license("Dell SMI License Version 1.0").licenseUrl("www.dell.com/smi").version("1.0 dev").build();
-    }
-
 }

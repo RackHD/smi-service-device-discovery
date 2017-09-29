@@ -3,17 +3,23 @@
  */
 package com.dell.isg.smi.service.device.discovery.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.dell.isg.smi.service.device.discovery.BuildInfo;
 
 @RestController
 @RequestMapping("/")
 public class RootController {
 
+	@Autowired
+	private BuildInfo buildInfo;
+
     @RequestMapping(method = RequestMethod.GET)
-    public String ping() {
-        return "Discovery Service - Running";
+    public String version() {
+        return buildInfo.toString();
     }
 
 }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dell.isg.smi.commons.elm.exception.RuntimeCoreException;
 import com.dell.isg.smi.commons.utilities.CustomRecursiveToStringStyle;
 import com.dell.isg.smi.commons.model.common.DevicesIpsRequest;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoverIPRangeDeviceRequests;
@@ -36,9 +35,8 @@ public class DeviceDiscoveryController {
 
     private static final Logger logger = LoggerFactory.getLogger(DeviceDiscoveryController.class.getName());
 
-
     @RequestMapping(value = "/range", method = RequestMethod.POST, headers = "Accept=application/json", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "/range", nickname = "range", notes = "This operation allow user to collect server software identity throu wsman.", response = DiscoverdDeviceResponse.class, responseContainer = "List")
+    @ApiOperation(value = "/range", nickname = "range", notes = "This operation will ping sweep and discover devices within the given IP range.", response = DiscoverdDeviceResponse.class, responseContainer = "List")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success", response = DiscoverdDeviceResponse.class), @ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 500, message = "Failure") })
     public List<DiscoverdDeviceResponse> discover(@RequestBody DiscoverIPRangeDeviceRequests discoverIPRangeDeviceRequests) throws Exception {
         logger.trace("Range submitted for discovery : {} ", ReflectionToStringBuilder.toString(discoverIPRangeDeviceRequests, new CustomRecursiveToStringStyle(99)));
@@ -55,7 +53,7 @@ public class DeviceDiscoveryController {
 
 
     @RequestMapping(value = "/ips", method = RequestMethod.POST, headers = "Accept=application/json", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "/ips", nickname = "ips", notes = "This operation allow user to collect server software identity throu wsman.", response = DiscoverdDeviceResponse.class, responseContainer = "List")
+    @ApiOperation(value = "/ips", nickname = "ips", notes = "This operation will ping sweep and discover devices within the given IP list.", response = DiscoverdDeviceResponse.class, responseContainer = "List")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success", response = DiscoverdDeviceResponse.class), @ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 500, message = "Failure") })
     public List<DiscoverdDeviceResponse> discover(@RequestBody DevicesIpsRequest deviceIps)  throws Exception {
         List<DiscoverdDeviceResponse> response = null;
