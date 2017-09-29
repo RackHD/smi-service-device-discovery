@@ -87,6 +87,6 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Bean
     public Docket newsApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("deviceDiscovery").apiInfo(new ApiInfoBuilder().title("Device Discovery Service").version(buildInfo.toString()).build()).select().paths(regex("/api.*")).build();
+        return new Docket(DocumentationType.SWAGGER_2).groupName("deviceDiscovery").apiInfo(new ApiInfoBuilder().title("SMI Micro-service : Device Discovery").version(buildInfo.toString()).build()).select().paths(regex("/api.*")).build();
     }
 }
