@@ -20,8 +20,7 @@ The service can also start up to bootstrap its configuration from consul. More i
 CURL example with one network range payload
 +++++++++++++++++++++++++++++++++++++++++++
 
-The micro-service REST endpoints can be invoked via CURL or via another
-application.
+The micro-service REST endpoints can be invoked via CURL or via another application.
 
 Example:
 
@@ -36,8 +35,7 @@ The payload allows for global and local (per range) credentials and device types
 
 Example Payload 1.
 
-Use global credentials (override all credentials in application yml for
-all devices) 
+Use global credentials (override all credentials in application yml for all devices) 
 ....
 /api/1.0/discover/range
 

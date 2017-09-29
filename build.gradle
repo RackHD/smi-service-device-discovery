@@ -52,7 +52,7 @@ buildscript {
     	springCloudVersion = 'Camden.SR5'
     	vaadinVersion = '8.0.6'
         vaadinSpringVersion = '2.0.1'
-        generatedAsciidoc = file("${buildDir}/docs/asciidoc/generated") 
+        generatedAsciidoc = file("${buildDir}/docs/apidocs/asciidoc/generated") 
 	}
    repositories {
 	maven {url "https://plugins.gradle.org/m2/"}
@@ -130,7 +130,7 @@ dependencies {
 	compile 'com.dell.isg.smi:adapter-chassis:1.0.29'
     compile 'com.dell.isg.smi:commons-elm:1.0.82'
     compile 'com.dell.isg.smi:commons-utilities:1.0.32'
-	compile 'com.dell.isg.smi:commons-model:1.0-SNAPSHOT'
+	compile 'com.dell.isg.smi:commons-model:1.0.97'
 	compile "org.springframework.boot:spring-boot-starter-web"
 	compile "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.springframework.boot:spring-boot-starter-actuator"
@@ -309,7 +309,7 @@ task dependencySourcesZip(type: Zip, dependsOn: 'buildSourcePathsArray' ) {
 asciidoctor {
     dependsOn test
     sources {
-        include 'api.adoc'
+        include 'api-device-discovery-v1.adoc'
     }
     backends = ['pdf']
     attributes = [
@@ -330,7 +330,7 @@ bintray {
 	user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
 	key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
     filesSpec {
-       from file(asciidoctor.outputDir.path + '/pdf/api.pdf')
+       from file(asciidoctor.outputDir.path + '/pdf')
        into '.'
     }
     dryRun = false
