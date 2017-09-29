@@ -41,7 +41,7 @@ Use global credentials (override all credentials in application yml for all devi
 
 {
    "credential":{
-      "user":"root",
+      "userName":"root",
       "password":"calvin"
    },
    "discoverIpRangeDeviceRequests":[
@@ -185,7 +185,7 @@ The example payload below will attempt to discover servers and chassis in the ip
 /api/1.0/discover/range
 {
    "credential":{
-      "user": "root",
+      "userName": "root",
       "password": "calvin"
    },
    "deviceType": ["SERVER", "CHASSIS"],
